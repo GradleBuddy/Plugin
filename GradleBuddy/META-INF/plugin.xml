@@ -52,9 +52,9 @@
 
             <action id="GradleBuddy.ManageAction"
 
-                    class="Actions.ManageGearsAction"
-                    text="Manage _Android Gears"
-                    description="Add, edit and remove android gear dependencies">
+                    class="Actions.ManageGradleAction"
+                    text="Manage _Gradle Dependencies"
+                    description="Add, edit and remove gradle dependencies">
                 <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="M" keymap="$default"/>
             </action>
 
@@ -68,10 +68,10 @@
                 <!--<keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="L" keymap="$default"/>-->
             <!--</action>-->
             <separator/>
-            <action id="SettingsAction" class="Actions.SettingsAction" text="Android Gears Settings"
-                    description="Manage the settings for your Android Gears Plugin">
-                <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="S" keymap="$default"/>
-            </action>
+            <!--<action id="SettingsAction" class="Actions.SettingsAction" text="Android Gears Settings"-->
+                    <!--description="Manage the settings for your Gradle Plugins">-->
+                <!--<keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="S" keymap="$default"/>-->
+            <!--</action>-->
             <action id="GradleBuddy.AboutGradleBuddyAction" class="Actions.AboutGradleBuddyAction" text="About Gradle Buddy"
                     description="Credits and Information About Gradle Buddy">
                 <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="A" keymap="$default"/>
