@@ -1,6 +1,5 @@
 package Actions;
 
-import Forms.ManageAndroidGearsForm;
 import Forms.SettingsForm;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

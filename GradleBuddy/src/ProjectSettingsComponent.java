@@ -1,5 +1,4 @@
 import Singletons.SettingsManager;
-import Workers.Git.IgnoreCheckWorker;
 import Workers.Sync.SyncGears;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.module.Module;
@@ -29,14 +28,7 @@ public class ProjectSettingsComponent implements ProjectComponent {
     }
 
     public void projectOpened() {
-        //Puts an entry in the ignore file, if you have such
-        IgnoreCheckWorker ignoreCheckWorker = new IgnoreCheckWorker(){
 
-        };
-        ignoreCheckWorker.execute();
-
-        //Auto-sync
-        syncGears();
     }
 
     public void projectClosed() {

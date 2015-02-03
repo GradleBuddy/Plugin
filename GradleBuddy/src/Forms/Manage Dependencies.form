@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Forms.ManageAndroidGearsForm">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Forms.ManageDependenciesForm">
   <grid id="27dc6" binding="MasterPanel" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
@@ -49,7 +49,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="41c9" class="javax.swing.JList" binding="AllGearsList">
+                      <component id="41c9" class="javax.swing.JList" binding="AllDependenciesList">
                         <constraints/>
                         <properties>
                           <model/>
@@ -338,7 +338,7 @@
                   <gridbag weightx="1.0" weighty="1.0"/>
                 </constraints>
                 <properties>
-                  <text value="Install Gear"/>
+                  <text value="Install Dependency"/>
                 </properties>
               </component>
               <component id="e5293" class="javax.swing.JButton" binding="OpenInBrowserButton">
@@ -350,20 +350,7 @@
                   <text value="Open Homepage In Browser"/>
                 </properties>
               </component>
-              <component id="8bbde" class="javax.swing.JButton" binding="DeclareUndeclareGearButton">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                    <minimum-size width="140" height="-1"/>
-                    <preferred-size width="140" height="-1"/>
-                  </grid>
-                  <gridbag weightx="0.3" weighty="1.0"/>
-                </constraints>
-                <properties>
-                  <horizontalAlignment value="0"/>
-                  <text value="Declare Gear"/>
-                </properties>
-              </component>
-              <component id="71689" class="javax.swing.JButton" binding="UpdateGearButton">
+              <component id="71689" class="javax.swing.JButton" binding="UpdateDependencyButton">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <minimum-size width="140" height="-1"/>
@@ -373,14 +360,14 @@
                 </constraints>
                 <properties>
                   <horizontalAlignment value="0"/>
-                  <text value="Update Gear"/>
+                  <text value="Update Dependency"/>
                 </properties>
               </component>
             </children>
           </grid>
         </children>
       </grid>
-      <grid id="5e2f2" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="5e2f2" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false">
@@ -394,24 +381,16 @@
         <children>
           <component id="59ba8" class="javax.swing.JButton" binding="doneButton" default-binding="true">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <text value="Done"/>
             </properties>
           </component>
-          <component id="8f7e9" class="javax.swing.JButton" binding="SyncButton">
-            <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Sync Android Gears"/>
-            </properties>
-          </component>
           <grid id="42cce" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -459,7 +438,7 @@
             </constraints>
             <properties>
               <background swing-color="Button.background"/>
-              <icon value="Forms/AndroidGearsHeader.png"/>
+              <icon value="Forms/GradleBuddyHeader.png"/>
               <text value=""/>
             </properties>
           </component>

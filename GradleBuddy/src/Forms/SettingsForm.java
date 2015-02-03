@@ -3,7 +3,6 @@ package Forms;
 import Singletons.SettingsManager;
 import Utilities.OSValidator;
 import Utilities.Utils;
-import Workers.Git.GitWorker;
 import Workers.Settings.SetCreateIgnoreEntryWorker;
 import org.apache.commons.io.FileUtils;
 
@@ -14,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
 /**
@@ -41,7 +39,6 @@ public class SettingsForm {
     public SettingsForm() {
         SettingsManager.getInstance().loadSettings();
         setupCheckBoxes();
-        setupButtons();
         setupMiscUI();
     }
 
@@ -64,8 +61,9 @@ public class SettingsForm {
             }
         });
     }
-
+/*
     private void setupButtons() {
+        /*
         resynchronizeAndroidGearsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -118,14 +116,9 @@ public class SettingsForm {
             }
         });
 
-        DefaultSpecPathButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                setSpecsRepoDirectory(Utils.getDefaultDirectory());
-            }
-        });
-    }
 
+    }
+*/
     private void setupMiscUI() {
         ResyncProgressPanel.setVisible(false);
 
@@ -237,124 +230,5 @@ public class SettingsForm {
         ResyncProgressPanel.setVisible(true);
     }
 
-    private void setSpecsRepoDirectory(File specsDirectory){
-        //Make sure the directory exists
-        if (specsDirectory.exists()){
-            //Double check that it is a directory
-            if (specsDirectory.isDirectory()){
 
-                if (Utils.androidGearsDirectory().exists()){
-                    //Make local copy of old specs directory
-                    File oldSpecsDirectory = Utils.androidGearsDirectory();
-
-                    Boolean failure = false;
-                    for (File file : oldSpecsDirectory.listFiles()){
-                        try {
-                            if (file.isDirectory()){
-                                FileUtils.moveDirectoryToDirectory(file, new File(specsDirectory.getAbsolutePath()+Utils.pathSeparator()+"repos"), true);
-                            }
-                        } catch (IOException e) {
-
-                            failure = true;
-                            e.printStackTrace();
-                            break;
-                        }
-                    }
-
-                    if (!failure){
-                        //Save new setting!
-                        SettingsManager.getInstance().setSpecsPath(specsDirectory.getAbsolutePath());
-
-                        //Delete previous path, if it exists
-                        FileUtils.deleteQuietly(oldSpecsDirectory);
-
-                        //Set specs directory in UI
-                        SpecUrlTextField.setText(specsDirectory.getAbsolutePath());
-                    }
-                }
-                else {
-                    //Set new directory
-                    SettingsManager.getInstance().setSpecsPath(specsDirectory.getAbsolutePath());
-
-                    //Clone specs repo in new path
-                    showResyncLoadingMessage();
-                    resyncSpecs();
-                }
-            }
-        }
-    }
-
-    private void resyncSpecs() {
-        //Get gears directory
-        final File gearsDirectory = Utils.androidGearsDirectory();
-        final File gearsDirectoryCopy = new File(Utils.androidGearsDirectory().getParentFile().getAbsolutePath()+Utils.pathSeparator()+"reposCopy");
-
-
-        //First, make local copy of specNames for possible rollback
-        try {
-            if (!gearsDirectory.exists()){
-                GitWorker worker = new GitWorker(){
-                    @Override
-                    protected void done() {
-                        super.done();
-
-                        if (successful){
-                            showResyncSuccessMessage();
-                        }
-                        else {
-                            showResyncErrorMessage();
-                        }
-                    }
-
-                };
-                worker.execute();
-            }
-            else {
-                //Make local copy
-                FileUtils.copyDirectory(gearsDirectory, gearsDirectoryCopy);
-
-                //Delete original
-                FileUtils.deleteQuietly(gearsDirectory);
-
-                //Download new copy
-                GitWorker worker = new GitWorker(){
-                    @Override
-                    protected void done() {
-                        super.done();
-                        //Delete copy
-                        try {
-                            if (successful){
-                                //Delete the copy you made
-                                FileUtils.deleteQuietly(gearsDirectoryCopy);
-
-                                //Close the dialog
-                                showResyncSuccessMessage();
-                            }
-                            else {
-                                //Delete the original, just in case
-                                if (gearsDirectory.exists()){
-                                    FileUtils.deleteQuietly(gearsDirectory);
-                                }
-
-                                //Make local copy
-                                FileUtils.moveDirectory(gearsDirectoryCopy, gearsDirectory);
-
-                                //Close the dialog
-                                showResyncErrorMessage();
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            showResyncErrorMessage();
-                        }
-                    }
-
-                };
-                worker.execute();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            showResyncErrorMessage();
-        }
-    }
 }

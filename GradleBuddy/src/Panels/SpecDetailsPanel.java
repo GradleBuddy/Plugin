@@ -1,6 +1,6 @@
 package Panels;
 
-import Forms.ManageAndroidGearsForm;
+import Forms.ManageDependenciesForm;
 import Models.GearSpec.GearSpec;
 import Models.GearSpec.GearSpecAuthor;
 import Models.GearSpec.GearSpecDependency;
@@ -20,7 +20,7 @@ public class SpecDetailsPanel extends JPanel{
 
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 15));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setMaximumSize(new Dimension(ManageAndroidGearsForm.DETAILS_INNER_WIDTH, -1));
+        this.setMaximumSize(new Dimension(ManageDependenciesForm.DETAILS_INNER_WIDTH, -1));
 
 
         //Add repo name
@@ -40,7 +40,7 @@ public class SpecDetailsPanel extends JPanel{
 
         //Add summary
         if (selectedSpec.getSummary() != null) {
-            JLabel summaryLabel = new JLabel(Utils.wrappedStringForString(selectedSpec.getSummary(), ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel summaryLabel = new JLabel(Utils.wrappedStringForString(selectedSpec.getSummary(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             summaryLabel.setFont(new Font(summaryLabel.getFont().getName(), Font.PLAIN, 12));
             this.add(summaryLabel);
         }
@@ -48,12 +48,12 @@ public class SpecDetailsPanel extends JPanel{
         //Add authors
         if (selectedSpec.getRelease_notes() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>"+selectedSpec.getVersion()+" - Release Notes", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>"+selectedSpec.getVersion()+" - Release Notes", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
             //Add release notes
-            JLabel releaseNotesLabel = new JLabel(Utils.wrappedStringForString(selectedSpec.getRelease_notes(), ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel releaseNotesLabel = new JLabel(Utils.wrappedStringForString(selectedSpec.getRelease_notes(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             releaseNotesLabel.setFont(new Font(releaseNotesLabel.getFont().getName(), Font.PLAIN, 12));
             this.add(releaseNotesLabel);
         }
@@ -61,13 +61,13 @@ public class SpecDetailsPanel extends JPanel{
         //Add authors
         if (selectedSpec.getAuthors() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Authors", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Authors", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
             //Add authors
             for (GearSpecAuthor author : selectedSpec.getAuthors()) {
-                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(author.getName() + " - " + author.getEmail(), ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(author.getName() + " - " + author.getEmail(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
                 authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
                 this.add(authorLabel);
             }
@@ -76,13 +76,13 @@ public class SpecDetailsPanel extends JPanel{
         //Add Dependencies
         if (selectedSpec.getDependencies() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Dependencies", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Dependencies", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
             //Add authors
             for (GearSpecDependency dependency : selectedSpec.getDependencies()) {
-                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(dependency.getName() + " - " + dependency.getVersion(), ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(dependency.getName() + " - " + dependency.getVersion(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
                 authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
                 this.add(authorLabel);
             }
@@ -91,7 +91,7 @@ public class SpecDetailsPanel extends JPanel{
         //Add License
         if (selectedSpec.getLicense() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>License", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>License", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
@@ -104,7 +104,7 @@ public class SpecDetailsPanel extends JPanel{
         //Add Copyright
         if (selectedSpec.getCopyright() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Copyright", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Copyright", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
@@ -134,7 +134,7 @@ public class SpecDetailsPanel extends JPanel{
         //Add Tags
         if (selectedSpec.getTags() != null) {
             //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Tags", ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Tags", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
@@ -148,7 +148,7 @@ public class SpecDetailsPanel extends JPanel{
             }
 
             //Create tags label
-            JLabel tagsLabel = new JLabel(Utils.wrappedStringForString(tagsString, ManageAndroidGearsForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            JLabel tagsLabel = new JLabel(Utils.wrappedStringForString(tagsString, ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             tagsLabel.setFont(new Font(tagsLabel.getFont().getName(), Font.PLAIN, 12));
             this.add(tagsLabel);
         }

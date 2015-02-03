@@ -29,7 +29,7 @@
             </constraints>
             <properties>
               <background swing-color="Button.background"/>
-              <icon value="Forms/AndroidGearsHeader.png"/>
+              <icon value="Forms/GradleBuddyHeader.png"/>
               <text value=""/>
             </properties>
           </component>

@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-    <id>com.github.GradleBuddy.plugin1</id>
+    <id>com.github.GradleBuddy.plugin2</id>
     <name>Gradle Buddy</name>
     <version>0.0.1</version>
     <vendor email="my3681@gmail.com" url="http://www.GradleBuddy.org">Gradle Buddy</vendor>
@@ -29,9 +29,9 @@
     <application-components>
         <!-- Add your application components here -->
 
-        <component>
-            <implementation-class>GitComponent</implementation-class>
-        </component>
+        <!--<component>-->
+            <!--<implementation-class>GitComponent</implementation-class>-->
+        <!--</component>-->
     </application-components>
 
     <project-components>
