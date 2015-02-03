@@ -1,7 +1,7 @@
 package Renderers;
 
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecAuthor;
+import Models.GearSpec.DependencySpecAuthor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -58,7 +58,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             //Iterate over all authors for matches
             if (spec.getAuthors() != null){
                 String authors = "";
-                for (GearSpecAuthor author : spec.getAuthors()){
+                for (DependencySpecAuthor author : spec.getAuthors()){
                     authors = authors+author.getName()+", ";
                 }
                 //Remove last comma/space
@@ -105,7 +105,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             //Set author label
             if (spec.getAuthors() != null){
                 String authors = "";
-                for (GearSpecAuthor author : spec.getAuthors()){
+                for (DependencySpecAuthor author : spec.getAuthors()){
                     authors = authors+author.getName()+", ";
                 }
                 //Remove last comma/space

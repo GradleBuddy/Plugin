@@ -3,12 +3,12 @@ package Models.GearSpec;
 /**
  * Created by matthewyork on 3/31/14.
  */
-public class GearSpecSource {
+public class DependencySpecSource {
     private String url;
     private String tag;
     private String source_files;
 
-    public GearSpecSource(String source_files, String url, String tag) {
+    public DependencySpecSource(String source_files, String url, String tag) {
         this.source_files = source_files;
         this.url = url;
         this.tag = tag;

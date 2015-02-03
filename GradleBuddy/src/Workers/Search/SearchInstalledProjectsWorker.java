@@ -1,7 +1,7 @@
 package Workers.Search;
 
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecAuthor;
+import Models.GearSpec.DependencySpecAuthor;
 import Models.GearSpecRegister.GearSpecRegister;
 import Utilities.GearSpecRegistrar;
 import Utilities.Utils;
@@ -47,7 +47,7 @@ public class SearchInstalledProjectsWorker extends SwingWorker<Void, Void>{
                         }
 
                         //Gather authors
-                        for (GearSpecAuthor author : declaredSpec.getAuthors()) {
+                        for (DependencySpecAuthor author : declaredSpec.getAuthors()) {
                             filterString = filterString+author.getName().toLowerCase()+" ";
                         }
 

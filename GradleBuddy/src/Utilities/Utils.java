@@ -1,7 +1,7 @@
 package Utilities;
 
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecSource;
+import Models.GearSpec.DependencySpecSource;
 import Singletons.SettingsManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -115,7 +115,7 @@ public class Utils {
         return versionsDirectory.list();
     }
 
-    public static String jarFileNameForSpecSource(GearSpecSource source){
+    public static String jarFileNameForSpecSource(DependencySpecSource source){
 
         //Get element with jar name in it
         String sourceString;

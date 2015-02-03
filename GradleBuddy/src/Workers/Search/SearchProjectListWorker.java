@@ -1,7 +1,7 @@
 package Workers.Search;
 
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecAuthor;
+import Models.GearSpec.DependencySpecAuthor;
 import Utilities.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -113,7 +113,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
                             }
 
                             //Gather authors
-                            for (GearSpecAuthor author : spec.getAuthors()) {
+                            for (DependencySpecAuthor author : spec.getAuthors()) {
                                 filterString = filterString+author.getName().toLowerCase()+" ";
                             }
 

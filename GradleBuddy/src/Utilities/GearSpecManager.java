@@ -1,7 +1,6 @@
 package Utilities;
 
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecDependency;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.io.FileUtils;
@@ -145,31 +144,6 @@ public class GearSpecManager {
             }
         }
 
-        //Download dependencies
-        if (spec.getDependencies() != null){
-            if (spec.getDependencies().size() > 0){
-                for(GearSpecDependency dependency : spec.getDependencies()){
-                    //Get spec from dependency
-                    DependencySpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
-
-                    //If we get a valid spec from the dependency, go ahead and download the dependency
-                    if (dependencySpec != null){
-                        //See if it is installed already, before we try
-                        if (!dependencySpec.isRegistered(project)){
-
-                            //Install dependency
-                            if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
-                                installJar(dependencySpec, project, module, spec);
-                            }
-                            else if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
-                                installModule(dependencySpec, project, module, spec);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         //Update project settings
         if (!updateInstallProjectSettingsForModule(spec, project, module)){
             return false;
@@ -228,31 +202,6 @@ public class GearSpecManager {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        }
-
-        //Download dependencies
-        if (spec.getDependencies() != null){
-            if (spec.getDependencies().size() > 0){
-                for(GearSpecDependency dependency : spec.getDependencies()){
-                    //Get spec from dependency
-                    DependencySpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
-
-                    //If we get a valid spec from the dependency, go ahead and download the dependency
-                    if (dependencySpec != null){
-                        //See if it is installed already, before we try
-                        if (!dependencySpec.isRegistered(project)){
-
-                            //Install dependency
-                            if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
-                                installJar(dependencySpec, project, module, spec);
-                            }
-                            else if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
-                                installModule(dependencySpec, project, module, spec);
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         //Update project settings

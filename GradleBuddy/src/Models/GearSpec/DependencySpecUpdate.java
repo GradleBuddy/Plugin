@@ -18,7 +18,6 @@ public class DependencySpecUpdate extends DependencySpec {
         setAuthors(spec.getAuthors());
         setMinimum_api(spec.getMinimum_api());
         setSource(spec.getSource());
-        setDependencies(spec.getDependencies());
         setTags(spec.getTags());
         setDependencyState(spec.getDependencyState());
     }

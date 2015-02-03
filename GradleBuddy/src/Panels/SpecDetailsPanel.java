@@ -2,8 +2,7 @@ package Panels;
 
 import Forms.ManageDependenciesForm;
 import Models.GearSpec.DependencySpec;
-import Models.GearSpec.GearSpecAuthor;
-import Models.GearSpec.GearSpecDependency;
+import Models.GearSpec.DependencySpecAuthor;
 import Utilities.Utils;
 
 import javax.swing.*;
@@ -66,23 +65,8 @@ public class SpecDetailsPanel extends JPanel{
             this.add(header);
 
             //Add authors
-            for (GearSpecAuthor author : selectedSpec.getAuthors()) {
+            for (DependencySpecAuthor author : selectedSpec.getAuthors()) {
                 JLabel authorLabel = new JLabel(Utils.wrappedStringForString(author.getName() + " - " + author.getEmail(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
-                authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
-                this.add(authorLabel);
-            }
-        }
-
-        //Add Dependencies
-        if (selectedSpec.getDependencies() != null) {
-            //Add header
-            JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Dependencies", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
-            header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
-            this.add(header);
-
-            //Add authors
-            for (GearSpecDependency dependency : selectedSpec.getDependencies()) {
-                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(dependency.getName() + " - " + dependency.getVersion(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
                 authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
                 this.add(authorLabel);
             }

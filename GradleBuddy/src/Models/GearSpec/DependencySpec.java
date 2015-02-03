@@ -27,10 +27,9 @@ public class DependencySpec {
     private String copyright;
     private String homepage;
     private String license;
-    private ArrayList<GearSpecAuthor> authors;
+    private ArrayList<DependencySpecAuthor> authors;
     private int minimum_api;
-    private GearSpecSource source;
-    private ArrayList<GearSpecDependency> dependencies;
+    private DependencySpecSource source;
     private ArrayList<String> tags;
 
     public DependencyState getDependencyState() {
@@ -105,11 +104,11 @@ public class DependencySpec {
         this.license = license;
     }
 
-    public ArrayList<GearSpecAuthor> getAuthors() {
+    public ArrayList<DependencySpecAuthor> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(ArrayList<GearSpecAuthor> authors) {
+    public void setAuthors(ArrayList<DependencySpecAuthor> authors) {
         this.authors = authors;
     }
 
@@ -121,20 +120,12 @@ public class DependencySpec {
         this.minimum_api = minimum_api;
     }
 
-    public GearSpecSource getSource() {
+    public DependencySpecSource getSource() {
         return source;
     }
 
-    public void setSource(GearSpecSource source) {
+    public void setSource(DependencySpecSource source) {
         this.source = source;
-    }
-
-    public ArrayList<GearSpecDependency> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies(ArrayList<GearSpecDependency> dependencies) {
-        this.dependencies = dependencies;
     }
 
     public ArrayList<String> getTags() {
@@ -165,38 +156,5 @@ public class DependencySpec {
         }
 
         return false;
-    }
-
-    public ArrayList<DependencySpec> dependentGears(Project project){
-        //Get register
-        GearSpecRegister register = GearSpecRegistrar.getRegister(project);
-
-        //Setup dependents array
-        ArrayList<DependencySpec> dependents = new ArrayList<DependencySpec>();
-
-        //Iterate over register dependencies for potential dependents
-        if (register != null) {
-            if (register.declaredGears != null) {
-                for (DependencySpec spec : register.declaredGears) {
-                    if (this.getName().equals(spec.getName()) && this.getVersion().equals(spec.getVersion())){
-                        continue;
-                    }
-                    else { //For all not the calling spec
-                        if (spec.getDependencies() != null){
-                            for (GearSpecDependency dependency : spec.getDependencies()){
-                                //If a dependency matches the calling spec, add it as a dependent gear
-                                if (dependency.getName().equals(this.getName()) && dependency.getVersion().equals(this.getVersion())){
-                                    dependents.add(spec);
-                                    ArrayList<DependencySpec> dependentSpecs = spec.dependentGears(project);
-                                    dependents.addAll(dependentSpecs);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return dependents;
     }
 }
