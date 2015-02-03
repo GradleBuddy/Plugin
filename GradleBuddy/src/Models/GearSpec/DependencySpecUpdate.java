@@ -1,14 +1,12 @@
 package Models.GearSpec;
 
-import java.util.ArrayList;
-
 /**
  * Created by matthewyork on 4/9/14.
  * Updated by adfleshner  on 4/22/14.
  */
-public class GearSpecUpdate extends GearSpec {
+public class DependencySpecUpdate extends DependencySpec {
 
-    public GearSpecUpdate(GearSpec spec) {
+    public DependencySpecUpdate(DependencySpec spec) {
         setName(spec.getName());
         setSummary(spec.getSummary());
         setRelease_notes(spec.getRelease_notes());
@@ -22,7 +20,7 @@ public class GearSpecUpdate extends GearSpec {
         setSource(spec.getSource());
         setDependencies(spec.getDependencies());
         setTags(spec.getTags());
-        setGearState(spec.getGearState());
+        setDependencyState(spec.getDependencyState());
     }
 
     private String updateVersionNumber;

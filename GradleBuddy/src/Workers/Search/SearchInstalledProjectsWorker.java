@@ -1,6 +1,6 @@
 package Workers.Search;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecAuthor;
 import Models.GearSpecRegister.GearSpecRegister;
 import Utilities.GearSpecRegistrar;
@@ -17,7 +17,7 @@ public class SearchInstalledProjectsWorker extends SwingWorker<Void, Void>{
 
     private Project project;
     String searchString;
-    public ArrayList<GearSpec> specs = new ArrayList<GearSpec>();
+    public ArrayList<DependencySpec> specs = new ArrayList<DependencySpec>();
 
     public SearchInstalledProjectsWorker(Project project, String searchString) {
         this.project = project;
@@ -30,10 +30,10 @@ public class SearchInstalledProjectsWorker extends SwingWorker<Void, Void>{
         GearSpecRegister register = GearSpecRegistrar.getRegister(this.project);
 
         if (register != null){
-            ArrayList<GearSpec> installedSpecs = new ArrayList<GearSpec>();
-            for (GearSpec declaredSpec : register.declaredGears){
-                if (Utils.specStateForSpec(declaredSpec, project) == GearSpec.GearState.GearStateInstalled){
-                    declaredSpec.setGearState(Utils.specStateForSpec(declaredSpec, project));
+            ArrayList<DependencySpec> installedSpecs = new ArrayList<DependencySpec>();
+            for (DependencySpec declaredSpec : register.declaredGears){
+                if (Utils.specStateForSpec(declaredSpec, project) == DependencySpec.DependencyState.DependencyStateInstalled){
+                    declaredSpec.setDependencyState(Utils.specStateForSpec(declaredSpec, project));
 
                     String[] searchParameters = searchString.split(" ");
                     for (String searchParamter : searchParameters){

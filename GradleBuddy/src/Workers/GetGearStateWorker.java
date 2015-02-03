@@ -1,8 +1,6 @@
 package Workers;
 
-import Models.GearSpec.GearSpec;
-import Models.GearSpecRegister.GearSpecRegister;
-import Utilities.GearSpecRegistrar;
+import Models.GearSpec.DependencySpec;
 import Utilities.Utils;
 import com.intellij.openapi.project.Project;
 
@@ -14,10 +12,10 @@ import javax.swing.*;
 public class GetGearStateWorker extends SwingWorker<Void, Void> {
 
     Project project;
-    GearSpec selectedSpec;
-    public GearSpec.GearState gearState;
+    DependencySpec selectedSpec;
+    public DependencySpec.DependencyState dependencyState;
 
-    public GetGearStateWorker(Project project, GearSpec spec) {
+    public GetGearStateWorker(Project project, DependencySpec spec) {
         this.project = project;
         this.selectedSpec = spec;
     }
@@ -26,7 +24,7 @@ public class GetGearStateWorker extends SwingWorker<Void, Void> {
     protected Void doInBackground() throws Exception {
 
         //Get register
-        gearState = Utils.specStateForSpec(selectedSpec, project);
+        dependencyState = Utils.specStateForSpec(selectedSpec, project);
 
         return null;
     }

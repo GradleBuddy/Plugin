@@ -1,6 +1,6 @@
 package Utilities;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecSource;
 import Singletons.SettingsManager;
 import com.google.gson.Gson;
@@ -68,8 +68,8 @@ public class Utils {
         }
     }
 
-    public static GearSpec specForFile(File specFile){
-        GearSpec spec = null;
+    public static DependencySpec specForFile(File specFile){
+        DependencySpec spec = null;
 
         if (specFile != null){
             if(specFile.exists()) {
@@ -83,7 +83,7 @@ public class Utils {
                 }
                 //Get spec
                 try{
-                    spec = new Gson().fromJson(specString, GearSpec.class);
+                    spec = new Gson().fromJson(specString, DependencySpec.class);
                 }
                 catch (JsonSyntaxException e){
                     e.printStackTrace();
@@ -94,7 +94,7 @@ public class Utils {
         return spec;
     }
 
-    public static GearSpec specForInfo(String name, String version){
+    public static DependencySpec specForInfo(String name, String version){
         //Create spec file
         File specFile = null;
         if (version != null){
@@ -138,46 +138,46 @@ public class Utils {
         }
     }
 
-    public static GearSpec.GearState specStateForSpec(GearSpec spec, Project project){
-        if (spec.isRegistered(project)){
-            //Make local separator for speed
-            String pathSeparator = Utils.pathSeparator();
+    public static DependencySpec.DependencyState specStateForSpec(DependencySpec spec, Project project){
+//        if (spec.isRegistered(project)){
+//            //Make local separator for speed
+//            String pathSeparator = Utils.pathSeparator();
+//
+//            if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+//                //TODO: Only checks for name, not version...
+//                if (new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Jars"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion()+pathSeparator+Utils.jarFileNameForSpecSource(spec.getSource())).exists()){
+//                    return GearSpec.DependencyState.DependencyStateInstalled;
+//                }
+//                else {
+//                    return GearSpec.DependencyState.GearStateDeclared;
+//                }
+//            }
+//            else if(spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+//                //TODO: Only checks for name, not version...
+//                if(new File(project.getBasePath()+Utils.pathSeparator()+"Gears"+pathSeparator+"Modules"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion()).exists()){
+//                    return GearSpec.DependencyState.DependencyStateInstalled;
+//                }
+//                else{
+//                    return GearSpec.DependencyState.GearStateDeclared;
+//                }
+//            }
+//            else {
+//                return GearSpec.DependencyState.GearStateDeclared;
+//            }
+//        }
 
-            if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
-                //TODO: Only checks for name, not version...
-                if (new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Jars"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion()+pathSeparator+Utils.jarFileNameForSpecSource(spec.getSource())).exists()){
-                    return GearSpec.GearState.GearStateInstalled;
-                }
-                else {
-                    return GearSpec.GearState.GearStateDeclared;
-                }
-            }
-            else if(spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
-                //TODO: Only checks for name, not version...
-                if(new File(project.getBasePath()+Utils.pathSeparator()+"Gears"+pathSeparator+"Modules"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion()).exists()){
-                    return GearSpec.GearState.GearStateInstalled;
-                }
-                else{
-                    return GearSpec.GearState.GearStateDeclared;
-                }
-            }
-            else {
-                return GearSpec.GearState.GearStateDeclared;
-            }
-        }
-
-        return GearSpec.GearState.GearStateUninstalled;
+        return DependencySpec.DependencyState.DependencyStateUninstalled;
     }
 
-    public static File fileInstallPathForSpec(GearSpec spec, Project project){
+    public static File fileInstallPathForSpec(DependencySpec spec, Project project){
         if (spec != null & project != null){
             //Make local separator for speed
             String pathSeparator = Utils.pathSeparator();
 
-            if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+            if (spec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
                 return new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Jars"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion());
             }
-            else if (spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+            else if (spec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
                 return new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Modules"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion());
             }
         }

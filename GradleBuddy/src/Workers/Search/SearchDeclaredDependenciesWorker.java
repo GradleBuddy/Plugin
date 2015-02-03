@@ -1,6 +1,6 @@
 package Workers.Search;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecAuthor;
 import Models.GearSpecRegister.GearSpecRegister;
 import Utilities.GearSpecRegistrar;
@@ -17,7 +17,7 @@ public class SearchDeclaredDependenciesWorker extends SwingWorker<Void, Void> {
 
     private Project project;
     private String searchString;
-    public ArrayList<GearSpec> specs = new ArrayList<GearSpec>();
+    public ArrayList<DependencySpec> specs = new ArrayList<DependencySpec>();
 
     public SearchDeclaredDependenciesWorker(Project project, String searchString) {
         this.project = project;
@@ -34,8 +34,8 @@ public class SearchDeclaredDependenciesWorker extends SwingWorker<Void, Void> {
         if (register != null){
             //If not empty, search over all fields for matches
             String[] searchParameters = searchString.split(" ");
-            ArrayList<GearSpec> gears = new ArrayList<GearSpec>();
-            for (GearSpec spec : register.declaredGears){
+            ArrayList<DependencySpec> gears = new ArrayList<DependencySpec>();
+            for (DependencySpec spec : register.declaredGears){
                 for (String searchParamter : searchParameters){
                     String filterString = spec.getName().toLowerCase() + " " + spec.getVersion().toLowerCase();
 
@@ -54,7 +54,7 @@ public class SearchDeclaredDependenciesWorker extends SwingWorker<Void, Void> {
                     //Filter with the search string over spec metadata
                     if(filterString.contains(searchParamter.toLowerCase())){
                         //Set spec state
-                        spec.setGearState(Utils.specStateForSpec(spec, project));
+                        spec.setDependencyState(Utils.specStateForSpec(spec, project));
 
                         //Add gear
                         gears.add(spec);

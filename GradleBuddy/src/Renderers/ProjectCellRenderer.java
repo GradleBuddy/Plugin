@@ -1,7 +1,5 @@
 package Renderers;
 
-import Models.GearSpec.GearSpec;
-import Models.GearSpec.GearSpecAuthor;
 import com.intellij.openapi.project.Project;
 
 import javax.swing.*;

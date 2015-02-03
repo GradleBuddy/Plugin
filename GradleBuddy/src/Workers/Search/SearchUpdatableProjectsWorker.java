@@ -1,8 +1,8 @@
 package Workers.Search;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
+import Models.GearSpec.DependencySpecUpdate;
 import Models.GearSpec.GearSpecAuthor;
-import Models.GearSpec.GearSpecUpdate;
 import Models.GearSpecRegister.GearSpecRegister;
 import Utilities.GearSpecRegistrar;
 import Utilities.Utils;
@@ -18,7 +18,7 @@ public class SearchUpdatableProjectsWorker extends SwingWorker<Void, Void>{
 
     private Project project;
     private String searchString;
-    public ArrayList<GearSpecUpdate> specs = new ArrayList<GearSpecUpdate>();
+    public ArrayList<DependencySpecUpdate> specs = new ArrayList<DependencySpecUpdate>();
 
     public SearchUpdatableProjectsWorker(Project project, String searchString) {
         this.project = project;
@@ -33,10 +33,10 @@ public class SearchUpdatableProjectsWorker extends SwingWorker<Void, Void>{
 
         //Populate a list of installed gears
         if (register != null){
-            ArrayList<GearSpec> installedSpecs = new ArrayList<GearSpec>();
-            for (GearSpec declaredSpec : register.declaredGears){
-                if (Utils.specStateForSpec(declaredSpec, project) == GearSpec.GearState.GearStateInstalled){
-                    declaredSpec.setGearState(Utils.specStateForSpec(declaredSpec, project));
+            ArrayList<DependencySpec> installedSpecs = new ArrayList<DependencySpec>();
+            for (DependencySpec declaredSpec : register.declaredGears){
+                if (Utils.specStateForSpec(declaredSpec, project) == DependencySpec.DependencyState.DependencyStateInstalled){
+                    declaredSpec.setDependencyState(Utils.specStateForSpec(declaredSpec, project));
                     installedSpecs.add(declaredSpec);
                 }
             }
@@ -50,9 +50,9 @@ public class SearchUpdatableProjectsWorker extends SwingWorker<Void, Void>{
         return null;
     }
 
-    private  void filterInstalledGears(ArrayList<GearSpec> installedGears) {
+    private  void filterInstalledGears(ArrayList<DependencySpec> installedGears) {
         //Iterate over all installed gears
-        for (GearSpec spec : installedGears){
+        for (DependencySpec spec : installedGears){
 
             //Get all versions for spec
             String[] versions = Utils.versionsForProject(spec.getName());
@@ -61,7 +61,7 @@ public class SearchUpdatableProjectsWorker extends SwingWorker<Void, Void>{
             if (versions.length > 0){
                 //If the version does not equal the last available version, then a
                 if (!versions[versions.length -1].equals(spec.getVersion())){
-                    GearSpecUpdate updateSpec = new GearSpecUpdate(spec);
+                    DependencySpecUpdate updateSpec = new DependencySpecUpdate(spec);
                     updateSpec.setUpdateVersionNumber(versions[versions.length -1]);
 
                     String[] searchParameters = searchString.split(" ");

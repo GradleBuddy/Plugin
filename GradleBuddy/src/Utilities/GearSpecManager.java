@@ -1,11 +1,10 @@
 package Utilities;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecDependency;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import org.apache.commons.io.FileUtils;
-import org.apache.velocity.runtime.directive.Foreach;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -23,15 +22,15 @@ public class GearSpecManager {
     // Install
     ///////////////////////
 
-    public static Boolean installGear(GearSpec spec, Project project, Module module){
+    public static Boolean installGear(DependencySpec spec, Project project, Module module){
         return GearSpecManager.installGear(spec, project, module, null);
     }
 
-    public static Boolean installGear(GearSpec spec, Project project, Module module, GearSpec parentSpec){
-        if (spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+    public static Boolean installGear(DependencySpec spec, Project project, Module module, DependencySpec parentSpec){
+        if (spec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
             return GearSpecManager.installModule(spec, project, module, parentSpec);
         }
-        else if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+        else if (spec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
             return GearSpecManager.installJar(spec, project, module, parentSpec);
         }
         else {
@@ -39,7 +38,7 @@ public class GearSpecManager {
         }
     }
 
-    public static Boolean installModule(GearSpec spec, Project project, Module module, GearSpec parentSpec){
+    public static Boolean installModule(DependencySpec spec, Project project, Module module, DependencySpec parentSpec){
         //Create local path separator for speed
         String pathSeparator = Utils.pathSeparator();
 
@@ -151,7 +150,7 @@ public class GearSpecManager {
             if (spec.getDependencies().size() > 0){
                 for(GearSpecDependency dependency : spec.getDependencies()){
                     //Get spec from dependency
-                    GearSpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
+                    DependencySpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
 
                     //If we get a valid spec from the dependency, go ahead and download the dependency
                     if (dependencySpec != null){
@@ -159,10 +158,10 @@ public class GearSpecManager {
                         if (!dependencySpec.isRegistered(project)){
 
                             //Install dependency
-                            if (dependencySpec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+                            if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
                                 installJar(dependencySpec, project, module, spec);
                             }
-                            else if (dependencySpec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+                            else if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
                                 installModule(dependencySpec, project, module, spec);
                             }
                         }
@@ -182,7 +181,7 @@ public class GearSpecManager {
         }
 
         //Register spec
-        if (GearSpecRegistrar.registerGear(spec, project, GearSpec.GearState.GearStateInstalled)){
+        if (GearSpecRegistrar.registerGear(spec, project, DependencySpec.DependencyState.DependencyStateInstalled)){
             return true;
         }
         else {
@@ -190,7 +189,7 @@ public class GearSpecManager {
         }
     }
 
-    public static Boolean installJar(GearSpec spec, Project project, Module module, GearSpec parentSpec){
+    public static Boolean installJar(DependencySpec spec, Project project, Module module, DependencySpec parentSpec){
         //Create local path separator for speed
         String pathSeparator = Utils.pathSeparator();
 
@@ -236,7 +235,7 @@ public class GearSpecManager {
             if (spec.getDependencies().size() > 0){
                 for(GearSpecDependency dependency : spec.getDependencies()){
                     //Get spec from dependency
-                    GearSpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
+                    DependencySpec dependencySpec = Utils.specForInfo(dependency.getName(), dependency.getVersion());
 
                     //If we get a valid spec from the dependency, go ahead and download the dependency
                     if (dependencySpec != null){
@@ -244,10 +243,10 @@ public class GearSpecManager {
                         if (!dependencySpec.isRegistered(project)){
 
                             //Install dependency
-                            if (dependencySpec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+                            if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
                                 installJar(dependencySpec, project, module, spec);
                             }
-                            else if (dependencySpec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+                            else if (dependencySpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
                                 installModule(dependencySpec, project, module, spec);
                             }
                         }
@@ -267,7 +266,7 @@ public class GearSpecManager {
         }
 
         //Register spec
-        if (GearSpecRegistrar.registerGear(spec, project, GearSpec.GearState.GearStateInstalled)){
+        if (GearSpecRegistrar.registerGear(spec, project, DependencySpec.DependencyState.DependencyStateInstalled)){
             return true;
         }
         else {
@@ -275,7 +274,7 @@ public class GearSpecManager {
         }
     }
 
-    private static Boolean updateInstallProjectSettingsForModule(GearSpec spec, Project project, Module module){
+    private static Boolean updateInstallProjectSettingsForModule(DependencySpec spec, Project project, Module module){
         //Create local path separator for speed
         String pathSeparator = Utils.pathSeparator();
         
@@ -394,7 +393,7 @@ public class GearSpecManager {
         return true;
     }
 
-    private static Boolean updateInstallProjectSettingsForJar(GearSpec selectedSpec, Module module){
+    private static Boolean updateInstallProjectSettingsForJar(DependencySpec selectedSpec, Module module){
         //Get build file
         File buildFile = new File(new File(module.getModuleFilePath()).getParentFile().getAbsolutePath() + Utils.pathSeparator() + "build.gradle");
 
@@ -448,9 +447,9 @@ public class GearSpecManager {
      * @param parentSpec
      * @return
      */
-    private static Boolean installInternalDependencies(GearSpec spec, GearSpec parentSpec, Project project){
+    private static Boolean installInternalDependencies(DependencySpec spec, DependencySpec parentSpec, Project project){
         if (parentSpec != null){
-            if (parentSpec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+            if (parentSpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
 
                 //Get parent gradle build file. Remember this is already cloned down, so we should be good!
                 File parentModuleBuildFile = new File(Utils.fileInstallPathForSpec(parentSpec, project).getAbsolutePath()+Utils.pathSeparator()+"build.gradle");
@@ -470,10 +469,10 @@ public class GearSpecManager {
                         String newDependencyString = "";
 
                         //Build new dependency string based on type
-                        if (spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+                        if (spec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
                             newDependencyString = "\ndependencies{compile project (':Gears:Modules:"+spec.getName()+":"+spec.getVersion()+"')}";
                         }
-                        else if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+                        else if (spec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
                             newDependencyString = "\ndependencies{compile fileTree(dir: '../../../../Gears/Jars/"+spec.getName()+"/"+spec.getVersion()+"', include: ['*.jar'])}";
                         }
 
@@ -508,11 +507,11 @@ public class GearSpecManager {
     // Uninstall
     ///////////////////////
 
-    public static Boolean uninstallGear(GearSpec spec, Project project, Module module){
-        if (spec.getType().equals(GearSpec.SPEC_TYPE_MODULE)){
+    public static Boolean uninstallGear(DependencySpec spec, Project project, Module module){
+        if (spec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
             return GearSpecManager.uninstallModule(spec, project, module);
         }
-        else if (spec.getType().equals(GearSpec.SPEC_TYPE_JAR)){
+        else if (spec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
             return GearSpecManager.uninstallJar(spec, project, module);
         }
         else {
@@ -520,7 +519,7 @@ public class GearSpecManager {
         }
     }
 
-    public static Boolean uninstallModule(GearSpec spec, Project project, Module module){
+    public static Boolean uninstallModule(DependencySpec spec, Project project, Module module){
 
         //Update settings files
         //This MUST be run before removing the physical module on disk. Otherwise, the directory structure for the module may be retained after syncing
@@ -564,7 +563,7 @@ public class GearSpecManager {
         }
     }
 
-    public static Boolean uninstallJar(GearSpec spec, Project project, Module module){
+    public static Boolean uninstallJar(DependencySpec spec, Project project, Module module){
 
         //Make local path separator for speed
         String pathSeparator = Utils.pathSeparator();
@@ -608,7 +607,7 @@ public class GearSpecManager {
         }
     }
 
-    private static Boolean updateProjectSettingsForModule(GearSpec spec, Project project, Module module){
+    private static Boolean updateProjectSettingsForModule(DependencySpec spec, Project project, Module module){
         //Make local path separator for speed
         String pathSeparator = Utils.pathSeparator();
 
@@ -712,7 +711,7 @@ public class GearSpecManager {
         return true;
     }
 
-    private static Boolean updateProjectSettingsForJar(GearSpec spec, Project project, Module module){
+    private static Boolean updateProjectSettingsForJar(DependencySpec spec, Project project, Module module){
         //Make local path separator for speed
         String pathSeparator = Utils.pathSeparator();
 
@@ -773,10 +772,10 @@ public class GearSpecManager {
      * @param project
      * @return
      */
-    private static Boolean uninstallInternalDependencies(GearSpec spec, GearSpec parentSpec, Project project){
+    private static Boolean uninstallInternalDependencies(DependencySpec spec, DependencySpec parentSpec, Project project){
 
         if (parentSpec != null){
-            if (parentSpec.getType().equals(GearSpec.SPEC_TYPE_MODULE)) {
+            if (parentSpec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)) {
                 
             }
         }

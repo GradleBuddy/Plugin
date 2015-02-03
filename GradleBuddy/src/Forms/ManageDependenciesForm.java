@@ -6,7 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-import Models.GearSpec.GearSpecUpdate;
+import Models.GearSpec.DependencySpec;
+import Models.GearSpec.DependencySpecUpdate;
 import Panels.SpecDetailsPanel;
 import Renderers.GearSpecCellRenderer;
 import Renderers.ModuleCellRenderer;
@@ -17,7 +18,6 @@ import Utilities.Utils;
 import java.net.URI;
 import java.util.*;
 
-import Models.GearSpec.GearSpec;
 import Workers.*;
 import Workers.InstallUninstall.*;
 import Workers.Search.SearchInstalledProjectsWorker;
@@ -40,12 +40,12 @@ public class ManageDependenciesForm {
     private Boolean dirty = false; //If set true, then we need to rebuild project
 
     File androidDependenciesDirectory;
-    private GearSpec selectedSpec;
-    private GearSpecUpdate selectedUpdateSpec;
-    private ArrayList<GearSpec> availableDependencies;
-    private ArrayList<GearSpec> declaredProjects;
-    private ArrayList<GearSpec> installedProjects;
-    private ArrayList<GearSpecUpdate> updatableProjects;
+    private DependencySpec selectedSpec;
+    private DependencySpecUpdate selectedUpdateSpec;
+    private ArrayList<DependencySpec> availableDependencies;
+    private ArrayList<DependencySpec> declaredProjects;
+    private ArrayList<DependencySpec> installedProjects;
+    private ArrayList<DependencySpecUpdate> updatableProjects;
     private ArrayList<String> projectVersions;
     Project[] targetProjects;
     Module[] targetModules;
@@ -594,7 +594,7 @@ public class ManageDependenciesForm {
     // Details Management
     ///////////////////////
 
-    private void setDetailsForSpec(GearSpec spec) {
+    private void setDetailsForSpec(DependencySpec spec) {
         //If it is the same as you have selected, don't do anything, else, get the specified version
 
         SpecDetailsPanel specDetailsPanel = new SpecDetailsPanel(spec);
@@ -615,8 +615,8 @@ public class ManageDependenciesForm {
         setInstallationStatusForSpec(spec);
 
         //Set update button
-        if (spec instanceof GearSpecUpdate) {
-            UpdateDependencyButton.setText("Update Gear to " + ((GearSpecUpdate) spec).getUpdateVersionNumber());
+        if (spec instanceof DependencySpecUpdate) {
+            UpdateDependencyButton.setText("Update Gear to " + ((DependencySpecUpdate) spec).getUpdateVersionNumber());
             UpdateDependencyButton.setVisible(true);
         } else {
             UpdateDependencyButton.setVisible(false);
@@ -625,7 +625,7 @@ public class ManageDependenciesForm {
 
     private void clearDetailsUI() {
         //Clear information
-        SpecDetailsPanel specDetailsPanel = new SpecDetailsPanel(new GearSpec());
+        SpecDetailsPanel specDetailsPanel = new SpecDetailsPanel(new DependencySpec());
 
         //Set panel in scrollpane
         DetailsScrollPane.setViewportView(specDetailsPanel);
@@ -643,15 +643,15 @@ public class ManageDependenciesForm {
         OpenInBrowserButton.setVisible(false);
     }
 
-    private void setInstallationStatusForSpec(final GearSpec spec) {
+    private void setInstallationStatusForSpec(final DependencySpec spec) {
         GetGearStateWorker worker = new GetGearStateWorker(targetProjects[TargetProjectComboBox.getSelectedIndex()], spec) {
             @Override
             protected void done() {
                 super.done();
 
-                if (this.gearState == GearSpec.GearState.GearStateUninstalled) {
+                if (this.dependencyState == DependencySpec.DependencyState.DependencyStateUninstalled) {
                     InstallUninstallButton.setText("Install Dependency");
-                } else if (this.gearState == GearSpec.GearState.GearStateInstalled) {
+                } else if (this.dependencyState == DependencySpec.DependencyState.DependencyStateInstalled) {
                     InstallUninstallButton.setText("Uninstall Dependency");
                 }
             }
@@ -696,11 +696,11 @@ public class ManageDependenciesForm {
     // Install / Uninstall
     ///////////////////////
 
-    private void toggleDependency(final GearSpec spec) {
+    private void toggleDependency(final DependencySpec spec) {
         final Project targetProject = targetProjects[TargetProjectComboBox.getSelectedIndex()];
 
-        if (spec.getGearState() == GearSpec.GearState.GearStateInstalled) {
-            ArrayList<GearSpec> dependenciesToUninstall = new ArrayList<GearSpec>();
+        if (spec.getDependencyState() == DependencySpec.DependencyState.DependencyStateInstalled) {
+            ArrayList<DependencySpec> dependenciesToUninstall = new ArrayList<DependencySpec>();
 
             //Uninstall dependencies, if necessary
             if (dependenciesToUninstall.size() > 0) {
@@ -748,7 +748,7 @@ public class ManageDependenciesForm {
 
 
 
-    private void uninstallDependencies(ArrayList<GearSpec> specs, final Project project, Module module) {
+    private void uninstallDependencies(ArrayList<DependencySpec> specs, final Project project, Module module) {
         //Set UI in uninstall state
         StatusLabel.setText("Uninstalling dependencies");
         LoadingSpinnerLabel.setVisible(true);
@@ -791,7 +791,7 @@ public class ManageDependenciesForm {
         worker.execute();
     }
 
-    private void updateGear(GearSpecUpdate spec) {
+    private void updateGear(DependencySpecUpdate spec) {
         //Set UI in uninstall state
         StatusLabel.setText("Updating " + spec.getName() + " to version " + spec.getUpdateVersionNumber());
         LoadingSpinnerLabel.setVisible(true);

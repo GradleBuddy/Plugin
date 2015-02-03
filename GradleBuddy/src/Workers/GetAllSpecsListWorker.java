@@ -1,14 +1,12 @@
 package Workers;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Utilities.Utils;
 import com.google.gson.Gson;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -39,7 +37,7 @@ public class GetAllSpecsListWorker extends SwingWorker<Void, Void> {
         final Gson gson = new Gson();
 
         //Create array for storing matched specs
-        final ArrayList<GearSpec> projectList = new ArrayList<GearSpec>();
+        final ArrayList<DependencySpec> projectList = new ArrayList<DependencySpec>();
 
         //If there is a searchstring, get matches!
         String directories[] = androidGearsDirectory.list(new FilenameFilter() {

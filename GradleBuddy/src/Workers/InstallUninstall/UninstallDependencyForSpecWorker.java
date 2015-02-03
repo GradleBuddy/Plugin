@@ -1,18 +1,11 @@
 package Workers.InstallUninstall;
 
-import Models.GearSpec.GearSpec;
-import Models.GearSpec.GearSpecDependency;
+import Models.GearSpec.DependencySpec;
 import Utilities.GearSpecManager;
-import Utilities.GearSpecRegistrar;
-import Utilities.Utils;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -20,12 +13,12 @@ import java.util.ArrayList;
  */
 public class UninstallDependencyForSpecWorker extends SwingWorker<Void, Void> {
 
-    private ArrayList<GearSpec> selectedSpecs;
+    private ArrayList<DependencySpec> selectedSpecs;
     private Project project;
     private Module module;
     public boolean successful;
 
-    public UninstallDependencyForSpecWorker(ArrayList<GearSpec> selectedSpecs, Project project, Module module) {
+    public UninstallDependencyForSpecWorker(ArrayList<DependencySpec> selectedSpecs, Project project, Module module) {
         this.selectedSpecs = selectedSpecs;
         this.project = project;
         this.module = module;
@@ -34,7 +27,7 @@ public class UninstallDependencyForSpecWorker extends SwingWorker<Void, Void> {
     @Override
     protected Void doInBackground() throws Exception {
 
-        for (GearSpec selectedSpec : this.selectedSpecs){
+        for (DependencySpec selectedSpec : this.selectedSpecs){
             if(!GearSpecManager.uninstallGear(selectedSpec, project, module)){
                 successful = false;
                 break;

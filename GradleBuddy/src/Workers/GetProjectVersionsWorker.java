@@ -1,6 +1,6 @@
 package Workers;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Utilities.OSValidator;
 import Utilities.Utils;
 
@@ -15,10 +15,10 @@ import java.util.Collections;
  * Created by matthewyork on 4/2/14.
  */
 public class GetProjectVersionsWorker extends SwingWorker<Void, Void> {
-    private GearSpec spec;
+    private DependencySpec spec;
     public ArrayList<String> versions = new ArrayList<String>();
 
-    public GetProjectVersionsWorker(GearSpec spec) {
+    public GetProjectVersionsWorker(DependencySpec spec) {
         this.spec = spec;
     }
 
@@ -28,7 +28,7 @@ public class GetProjectVersionsWorker extends SwingWorker<Void, Void> {
         return null;
     }
 
-    private ArrayList<String> versionsForSpec(GearSpec spec){
+    private ArrayList<String> versionsForSpec(DependencySpec spec){
 
 
         //Get path separator

@@ -1,6 +1,6 @@
 package Utilities;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpecRegister.GearSpecRegister;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by matthewyork on 4/5/14.
  */
 public class GearSpecRegistrar {
-    public static Boolean registerGear(GearSpec spec, Project project, GearSpec.GearState gearState){
+    public static Boolean registerGear(DependencySpec spec, Project project, DependencySpec.DependencyState dependencyState){
 
         //Get specregister file
         File registrationFile = new File(project.getBasePath()+Utils.pathSeparator()+"GearSpecRegister");
@@ -27,7 +27,7 @@ public class GearSpecRegistrar {
         GearSpecRegister register = null;
 
         //Set gear spec state
-        spec.setGearState(gearState);
+        spec.setDependencyState(dependencyState);
 
         //If the file exists, pull it back and add the dependency to it
         if (registrationFile.exists()){
@@ -43,21 +43,21 @@ public class GearSpecRegistrar {
 
             //Check for array existence for safety
             if (register.declaredGears == null){
-                register.declaredGears = new ArrayList<GearSpec>();
+                register.declaredGears = new ArrayList<DependencySpec>();
             }
 
             //Check for matches already in the register (say, if you are installing an already declared spec)
             boolean match = false;
             int matchIndex = -1;
             for(int ii = 0; ii < register.declaredGears.size(); ii++){
-                GearSpec declaredGear = register.declaredGears.get(ii);
+                DependencySpec declaredGear = register.declaredGears.get(ii);
                 //Check for exact match
                 if (declaredGear.getName().equals(spec.getName()) && declaredGear.getVersion().equals(spec.getVersion())){
                     //Flag a match
                     match = true;
 
                     //Make sure that the match reflect the most up to date spec state
-                    declaredGear.setGearState(Utils.specStateForSpec(declaredGear, project));
+                    declaredGear.setDependencyState(Utils.specStateForSpec(declaredGear, project));
 
                     break;
                 }
@@ -85,7 +85,7 @@ public class GearSpecRegistrar {
         else {
             //Create register and
             register = new GearSpecRegister();
-            register.declaredGears = new ArrayList<GearSpec>() {};
+            register.declaredGears = new ArrayList<DependencySpec>() {};
             register.declaredGears.add(spec);
         }
 
@@ -100,13 +100,13 @@ public class GearSpecRegistrar {
         return true;
     }
 
-    public static Boolean unregisterGear(GearSpec spec, Project project){
+    public static Boolean unregisterGear(DependencySpec spec, Project project){
         //Get register
         GearSpecRegister register = GearSpecRegistrar.getRegister(project);
 
         if (register != null){
             if (register.declaredGears != null){
-                for (GearSpec installedGear : register.declaredGears){
+                for (DependencySpec installedGear : register.declaredGears){
                     if (installedGear.getName().equals(spec.getName()) && installedGear.getVersion().equals(spec.getVersion())){
                         if (register.declaredGears.remove(installedGear)){
                             //Create new Gson instance for use

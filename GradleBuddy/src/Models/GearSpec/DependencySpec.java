@@ -9,17 +9,16 @@ import java.util.ArrayList;
 /**
  * Created by matthewyork on 3/31/14.
  */
-public class GearSpec {
-    public enum GearState {
-        GearStateUninstalled,
-        GearStateDeclared,
-        GearStateInstalled
+public class DependencySpec {
+    public enum DependencyState {
+        DependencyStateUninstalled,
+        DependencyStateInstalled
     };
 
     public static final String SPEC_TYPE_MODULE = "module";
     public static final String SPEC_TYPE_JAR = "jar";
 
-    private GearState gearState;
+    private DependencyState dependencyState;
     private String name;
     private String summary;
     private String release_notes;
@@ -34,12 +33,12 @@ public class GearSpec {
     private ArrayList<GearSpecDependency> dependencies;
     private ArrayList<String> tags;
 
-    public GearState getGearState() {
-        return gearState;
+    public DependencyState getDependencyState() {
+        return dependencyState;
     }
 
-    public void setGearState(GearState gearState) {
-        this.gearState = gearState;
+    public void setDependencyState(DependencyState dependencyState) {
+        this.dependencyState = dependencyState;
     }
 
     public String getName() {
@@ -157,7 +156,7 @@ public class GearSpec {
         //Iterate over register
         if (register != null){
             if (register.declaredGears != null){
-                for(GearSpec spec : register.declaredGears){
+                for(DependencySpec spec : register.declaredGears){
                     if (this.getName().equals(spec.getName()) && this.getVersion().equals(spec.getVersion())){
                         return true;
                     }
@@ -168,17 +167,17 @@ public class GearSpec {
         return false;
     }
 
-    public ArrayList<GearSpec> dependentGears(Project project){
+    public ArrayList<DependencySpec> dependentGears(Project project){
         //Get register
         GearSpecRegister register = GearSpecRegistrar.getRegister(project);
 
         //Setup dependents array
-        ArrayList<GearSpec> dependents = new ArrayList<GearSpec>();
+        ArrayList<DependencySpec> dependents = new ArrayList<DependencySpec>();
 
         //Iterate over register dependencies for potential dependents
         if (register != null) {
             if (register.declaredGears != null) {
-                for (GearSpec spec : register.declaredGears) {
+                for (DependencySpec spec : register.declaredGears) {
                     if (this.getName().equals(spec.getName()) && this.getVersion().equals(spec.getVersion())){
                         continue;
                     }
@@ -188,7 +187,7 @@ public class GearSpec {
                                 //If a dependency matches the calling spec, add it as a dependent gear
                                 if (dependency.getName().equals(this.getName()) && dependency.getVersion().equals(this.getVersion())){
                                     dependents.add(spec);
-                                    ArrayList<GearSpec> dependentSpecs = spec.dependentGears(project);
+                                    ArrayList<DependencySpec> dependentSpecs = spec.dependentGears(project);
                                     dependents.addAll(dependentSpecs);
                                 }
                             }

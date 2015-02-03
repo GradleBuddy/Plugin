@@ -1,7 +1,7 @@
 package Panels;
 
 import Forms.ManageDependenciesForm;
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecAuthor;
 import Models.GearSpec.GearSpecDependency;
 import Utilities.Utils;
@@ -13,9 +13,9 @@ import java.awt.*;
  * Created by matthewyork on 4/2/14.
  */
 public class SpecDetailsPanel extends JPanel{
-    private GearSpec selectedSpec;
+    private DependencySpec selectedSpec;
 
-    public SpecDetailsPanel(GearSpec selectedSpec) {
+    public SpecDetailsPanel(DependencySpec selectedSpec) {
         this.selectedSpec = selectedSpec;
 
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 15));

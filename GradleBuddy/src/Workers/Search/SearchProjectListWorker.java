@@ -1,6 +1,6 @@
 package Workers.Search;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecAuthor;
 import Utilities.Utils;
 import com.google.gson.Gson;
@@ -21,7 +21,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
 
     private String searchString;
     private Project project;
-    public ArrayList<GearSpec> specs = new ArrayList<GearSpec>();
+    public ArrayList<DependencySpec> specs = new ArrayList<DependencySpec>();
 
     public SearchProjectListWorker(String searchString,  Project project) {
         this.searchString = searchString;
@@ -34,7 +34,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
         return null;
     }
 
-    private ArrayList<GearSpec> projectsList(File androidGearsDirectory, final String searchString){
+    private ArrayList<DependencySpec> projectsList(File androidGearsDirectory, final String searchString){
         /*
         //Check for empty search string
         if(searchString.equals("")){
@@ -45,7 +45,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
         final Gson gson = new Gson();
 
         //Create array for storing matched specNames
-        final ArrayList<GearSpec> projectList = new ArrayList<GearSpec>();
+        final ArrayList<DependencySpec> projectList = new ArrayList<DependencySpec>();
 
         //If there is a searchstring, get matches!
         String directories[] =  androidGearsDirectory.list(new FilenameFilter() {
@@ -74,8 +74,8 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
                             return false;
                         }
 
-                        GearSpec spec = gson.fromJson(specString, GearSpec.class);
-                        spec.setGearState(Utils.specStateForSpec(spec, project));
+                        DependencySpec spec = gson.fromJson(specString, DependencySpec.class);
+                        spec.setDependencyState(Utils.specStateForSpec(spec, project));
                         projectList.add(spec);
                         return true;
                     }
@@ -99,7 +99,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
 
                     //Get spec
                     try {
-                        GearSpec spec = gson.fromJson(specString, GearSpec.class);
+                        DependencySpec spec = gson.fromJson(specString, DependencySpec.class);
 
                         String[] searchParameters = searchString.split(" ");
                         for (String searchParamter : searchParameters){
@@ -120,7 +120,7 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
                             //Filter with the search string over spec metadata
                             if(filterString.contains(searchParamter.toLowerCase())){
                                 //Set spec state
-                                spec.setGearState(Utils.specStateForSpec(spec, project));
+                                spec.setDependencyState(Utils.specStateForSpec(spec, project));
                                 projectList.add(spec);
                                 return true;
                             }

@@ -1,6 +1,6 @@
 package Renderers;
 
-import Models.GearSpec.GearSpec;
+import Models.GearSpec.DependencySpec;
 import Models.GearSpec.GearSpecAuthor;
 
 import javax.swing.*;
@@ -21,7 +21,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
     JLabel imageLabel;
     //JLabel jarLabel;
     ImageIcon declaredIcon = new ImageIcon(getClass().getResource("GearStateDeclared.png"));
-    ImageIcon installedIcon = new ImageIcon(getClass().getResource("GearStateInstalled.png"));
+    ImageIcon installedIcon = new ImageIcon(getClass().getResource("DependencyStateInstalled.png"));
     //ImageIcon jarfile = new ImageIcon(getClass().getResource("jarfile.png"));
 
     public GearSpecCellRenderer() {
@@ -36,7 +36,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             boolean isSelected,
             boolean cellHasFocus)
     {
-        GearSpec spec = (GearSpec)value;
+        DependencySpec spec = (DependencySpec)value;
 
         //Check for first runthrough
         if(nameLabel == null){
@@ -71,7 +71,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             //Set image
             imageLabel = new JLabel();
             //Set image
-            switch (spec.getGearState().ordinal()){
+            switch (spec.getDependencyState().ordinal()){
                 case 0: imageLabel.setIcon(new ImageIcon());
                     break;
                 case 1: imageLabel.setIcon(declaredIcon);
@@ -116,7 +116,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             }
 
             //Set image
-            switch (spec.getGearState().ordinal()){
+            switch (spec.getDependencyState().ordinal()){
                 case 0: imageLabel.setIcon(new ImageIcon());
                     break;
                 case 1: imageLabel.setIcon(declaredIcon);
