@@ -1,0 +1,82 @@
+<idea-plugin version="2">
+    <id>com.github.GradleBuddy.plugin1</id>
+    <name>Gradle Buddy</name>
+    <version>0.0.1</version>
+    <vendor email="my3681@gmail.com" url="http://www.GradleBuddy.org">Gradle Buddy</vendor>
+
+    <description><![CDATA[
+     GradleBuddy is a graphical manager for your Gradle dependencies sourced from all the most popular Gradle/Maven websites
+    ]]></description>
+
+    <change-notes><![CDATA[
+
+    ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.github.GradleBuddy">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+
+        <component>
+            <implementation-class>GitComponent</implementation-class>
+        </component>
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+        <component>
+            <implementation-class>ProjectSettingsComponent</implementation-class>
+        </component>
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+
+        <group id="GradleBuddy.Menu" text="Gradle Buddy" description="GradleBuddy" popup="true"
+               icon="/icons/gears.png">
+            <separator/>
+            <add-to-group group-id="ToolsMenu" anchor="after"
+                          relative-to-action="org.jetbrains.plugins.terminal.OpenLocalTerminalAction"/>
+
+            <action id="GradleBuddy.ManageAction"
+
+                    class="Actions.ManageGearsAction"
+                    text="Manage _Android Gears"
+                    description="Add, edit and remove android gear dependencies">
+                <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="M" keymap="$default"/>
+            </action>
+
+            <!--<action id="GradleBuddy.CreateGearAction" class="Actions.CreateGearAction" text="Create Gear Spec"-->
+                    <!--description="Form for creating an Android Gear">-->
+                <!--<keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="C" keymap="$default"/>-->
+            <!--</action>-->
+
+            <!--<action id="GradleBuddy.LintAction" class="Actions.LintGearAction" text="Lint Gear Spec"-->
+                    <!--description="Takes in a .gearspec file and lints it to make sure it is valid.">-->
+                <!--<keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="L" keymap="$default"/>-->
+            <!--</action>-->
+            <separator/>
+            <action id="SettingsAction" class="Actions.SettingsAction" text="Android Gears Settings"
+                    description="Manage the settings for your Android Gears Plugin">
+                <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="S" keymap="$default"/>
+            </action>
+            <action id="GradleBuddy.AboutGradleBuddyAction" class="Actions.AboutGradleBuddyAction" text="About Gradle Buddy"
+                    description="Credits and Information About Gradle Buddy">
+                <keyboard-shortcut first-keystroke="control alt shift G" second-keystroke="A" keymap="$default"/>
+            </action>
+        </group>
+    </actions>
+
+</idea-plugin>
