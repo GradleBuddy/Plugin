@@ -55,18 +55,8 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             authorLabel = new JLabel("", JLabel.LEFT);
             authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
 
-            //Iterate over all authors for matches
-            if (spec.getAuthors() != null){
-                String authors = "";
-                for (DependencySpecAuthor author : spec.getAuthors()){
-                    authors = authors+author.getName()+", ";
-                }
-                //Remove last comma/space
-                authors = authors.substring(0, authors.length()-2);
-
-                //Set label text
-                authorLabel.setText(authors);
-            }
+            //Set Author Label
+            authorLabel.setText(spec.getAuthor().getName());
 
             //Set image
             imageLabel = new JLabel();
@@ -102,18 +92,8 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             //Set name label
             nameLabel.setText(spec.getName());
 
-            //Set author label
-            if (spec.getAuthors() != null){
-                String authors = "";
-                for (DependencySpecAuthor author : spec.getAuthors()){
-                    authors = authors+author.getName()+", ";
-                }
-                //Remove last comma/space
-                authors = authors.substring(0, authors.length()-2);
-
-                //Set label text
-                authorLabel.setText(authors);
-            }
+            //Set Author Label
+            authorLabel.setText(spec.getAuthor().getName());
 
             //Set image
             switch (spec.getDependencyState().ordinal()){

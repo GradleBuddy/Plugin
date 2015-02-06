@@ -26,8 +26,10 @@ public class DependencySpec {
     private String type;
     private String copyright;
     private String homepage;
+    private String rating;
+    private String votes;
     private String license;
-    private ArrayList<DependencySpecAuthor> authors;
+    private DependencySpecAuthor author;
     private int minimum_api;
     private DependencySpecSource source;
     private ArrayList<String> tags;
@@ -96,6 +98,22 @@ public class DependencySpec {
         this.homepage = homepage;
     }
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getVotes() {
+        return votes;
+    }
+
+    public void setVotes(String votes) {
+        this.votes = votes;
+    }
+
     public String getLicense() {
         return license;
     }
@@ -104,12 +122,12 @@ public class DependencySpec {
         this.license = license;
     }
 
-    public ArrayList<DependencySpecAuthor> getAuthors() {
-        return authors;
+    public DependencySpecAuthor getAuthor() {
+        return author;
     }
 
-    public void setAuthors(ArrayList<DependencySpecAuthor> authors) {
-        this.authors = authors;
+    public void setAuthor(DependencySpecAuthor author) {
+        this.author = author;
     }
 
     public int getMinimum_api() {

@@ -58,18 +58,16 @@ public class SpecDetailsPanel extends JPanel{
         }
 
         //Add authors
-        if (selectedSpec.getAuthors() != null) {
+        if (selectedSpec.getAuthor() != null) {
             //Add header
             JLabel header = new JLabel(Utils.wrappedStringForString("<br/>Authors", ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
             header.setFont(new Font(header.getFont().getName(), Font.BOLD, 12));
             this.add(header);
 
             //Add authors
-            for (DependencySpecAuthor author : selectedSpec.getAuthors()) {
-                JLabel authorLabel = new JLabel(Utils.wrappedStringForString(author.getName() + " - " + author.getEmail(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
-                authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
-                this.add(authorLabel);
-            }
+            JLabel authorLabel = new JLabel(Utils.wrappedStringForString(selectedSpec.getAuthor().getName() + " - " + selectedSpec.getAuthor().getEmail(), ManageDependenciesForm.DETAILS_INNER_WIDTH), JLabel.LEFT);
+            authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
+            this.add(authorLabel);
         }
 
         //Add License

@@ -27,42 +27,7 @@ public class SearchInstalledProjectsWorker extends SwingWorker<Void, Void>{
     @Override
     protected Void doInBackground() throws Exception {
 
-        GearSpecRegister register = GearSpecRegistrar.getRegister(this.project);
 
-        if (register != null){
-            ArrayList<DependencySpec> installedSpecs = new ArrayList<DependencySpec>();
-            for (DependencySpec declaredSpec : register.declaredGears){
-                if (Utils.specStateForSpec(declaredSpec, project) == DependencySpec.DependencyState.DependencyStateInstalled){
-                    declaredSpec.setDependencyState(Utils.specStateForSpec(declaredSpec, project));
-
-                    String[] searchParameters = searchString.split(" ");
-                    for (String searchParamter : searchParameters){
-                        String filterString = declaredSpec.getName().toLowerCase() + " " + declaredSpec.getVersion().toLowerCase();
-
-                        //Gather tags
-                        if (declaredSpec.getTags() != null){
-                            for (String tag : declaredSpec.getTags()) {
-                                filterString = filterString+tag.toLowerCase()+" ";
-                            }
-                        }
-
-                        //Gather authors
-                        for (DependencySpecAuthor author : declaredSpec.getAuthors()) {
-                            filterString = filterString+author.getName().toLowerCase()+" ";
-                        }
-
-                        //Filter with the search string over spec metadata
-                        if(filterString.contains(searchParamter.toLowerCase())){
-                            //Add sepec
-                            installedSpecs.add(declaredSpec);
-                        }
-                    }
-                }
-            }
-
-            this.specs = installedSpecs;
-            return null;
-        }
 
         return null;
     }

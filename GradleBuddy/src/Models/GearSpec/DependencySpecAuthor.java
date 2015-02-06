@@ -6,6 +6,7 @@ package Models.GearSpec;
 public class DependencySpecAuthor {
     private String name;
     private String email;
+    private String imageUrl;
 
     public DependencySpecAuthor(String name, String email) {
         this.name = name;
@@ -26,5 +27,13 @@ public class DependencySpecAuthor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

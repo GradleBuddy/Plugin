@@ -1,6 +1,7 @@
 package Utilities;
 
 import Models.GearSpec.DependencySpec;
+import Models.GearSpec.DependencySpecSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Form;
@@ -66,8 +67,56 @@ public class JCenter {
         return dependencySpecs;
     }
 
-    private static DependencySpec dependencySpecForEntry(String html) {
+    private static DependencySpec dependencySpecForEntry(String htmlString) {
+        DependencySpec spec = new DependencySpec();
 
-        return new DependencySpec();
+        OMScanner scanner = new OMScanner(htmlString);
+        int contentIndex = -1;
+
+        //Get user avatar
+        contentIndex = htmlString.indexOf("<div class=\"useravatar\">");
+        if (contentIndex != -1) {
+            scanner.skipToString("background-image: url(");
+            //spec.sp
+        }
+
+        // Scan Url
+        contentIndex = htmlString.indexOf("<div class=\"title\">");
+        if (contentIndex != -1) {
+            //Get URL
+            scanner.setScanIndex(contentIndex + "<a href=\"".length());
+            spec.setSource(new DependencySpecSource());
+            String urlString = scanner.scanToString("\">");
+            spec.getSource().setUrl("https://bintray.com" + urlString);
+
+            //Get Title
+            scanner.skipToString(">");
+            spec.setName(scanner.scanToString("</a>"));
+        }
+
+        //Get rating
+        scanner.skipToString("<div itemprop=\"average\" content=\"");
+        spec.setRating(scanner.scanToString("\">"));
+
+        //Get votes
+        contentIndex = htmlString.indexOf("itemprop=\"votes\">");
+        if (contentIndex != -1) {
+            spec.setVotes(scanner.scanToString("<"));
+        }
+
+        //Get description (summary)
+        contentIndex = htmlString.indexOf("<div class=\"description\" title=\"");
+        if (contentIndex != -1) {
+            spec.setSummary(scanner.scanToString("<"));
+        }
+
+        //Get image url
+        contentIndex = htmlString.indexOf("<div class=\"description\" title=\"");
+        if (contentIndex != -1) {
+            spec.setSummary(scanner.scanToString("<"));
+            spec.getAuthor().setImageUrl(scanner.scanToString("\""));
+        }
+
+        return spec;
     }
 }

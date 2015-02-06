@@ -8,6 +8,10 @@ public class DependencySpecSource {
     private String tag;
     private String source_files;
 
+    public DependencySpecSource() {
+
+    }
+
     public DependencySpecSource(String source_files, String url, String tag) {
         this.source_files = source_files;
         this.url = url;

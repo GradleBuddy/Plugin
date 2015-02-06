@@ -21,8 +21,6 @@ import java.util.*;
 import Workers.*;
 import Workers.InstallUninstall.*;
 import Workers.Search.SearchInstalledProjectsWorker;
-import Workers.Search.SearchUpdatableProjectsWorker;
-import Workers.Search.SearchDeclaredDependenciesWorker;
 import Workers.Search.SearchProjectListWorker;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -43,9 +41,7 @@ public class ManageDependenciesForm {
     private DependencySpec selectedSpec;
     private DependencySpecUpdate selectedUpdateSpec;
     private ArrayList<DependencySpec> availableDependencies;
-    private ArrayList<DependencySpec> declaredProjects;
     private ArrayList<DependencySpec> installedProjects;
-    private ArrayList<DependencySpecUpdate> updatableProjects;
     private ArrayList<String> projectVersions;
     Project[] targetProjects;
     Module[] targetModules;
@@ -67,10 +63,7 @@ public class ManageDependenciesForm {
     private JLabel LoadingSpinnerLabel;
     private JComboBox TargetProjectComboBox;
     private JLabel HeaderLogo;
-    private JList DeclaredList;
     private JComboBox TargetModuleComboBox;
-    private JList UpdatesList;
-    private JPanel UpdatesTabPanel;
     private JButton UpdateDependencyButton;
 
     private void createUIComponents() {
@@ -92,14 +85,8 @@ public class ManageDependenciesForm {
         //Add directories mode
         refreshAvailableDependenciesList("");
 
-        //Get declared dependencies
-        refreshDeclaredList("");
-
         //Get installed dependencies
         refreshInstalledList("");
-
-        //Get updatable dependencies
-        refreshUpdatedList("");
 
         //Setup click listener
         AllDependenciesList.addListSelectionListener(new ListSelectionListener() {
@@ -110,14 +97,6 @@ public class ManageDependenciesForm {
         });
         //AllDependenciesList.setFocusable(false);
 
-        DeclaredList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                didSelectDeclaredSpecAtIndex(DeclaredList.getSelectedIndex());
-            }
-        });
-        //DeclaredList.setFocusable(false);
-
         InstalledList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
@@ -125,14 +104,6 @@ public class ManageDependenciesForm {
             }
         });
         //InstalledList.setFocusable(false);
-
-        UpdatesList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                didSelectUpdatesSpecAtIndex(UpdatesList.getSelectedIndex());
-            }
-        });
-        //UpdatesList.setFocusable(false);
 
         VersionsList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -436,13 +407,7 @@ public class ManageDependenciesForm {
                 refreshAvailableDependenciesList(searchString);
                 break;
             case 1:
-                refreshDeclaredList(searchString);
-                break;
-            case 2:
                 refreshInstalledList(searchString);
-                break;
-            case 3:
-                refreshUpdatedList(searchString);
                 break;
         }
     }
@@ -453,25 +418,10 @@ public class ManageDependenciesForm {
         AllDependenciesList.setVisibleRowCount(availableDependencies.size());
     }
 
-    private void reloadDeclaredList() {
-        DeclaredList.setListData(declaredProjects.toArray());
-        DeclaredList.setCellRenderer(new GearSpecCellRenderer());
-        DeclaredList.setVisibleRowCount(declaredProjects.size());
-    }
-
     private void reloadInstalledList() {
         InstalledList.setListData(installedProjects.toArray());
         InstalledList.setCellRenderer(new GearSpecCellRenderer());
         InstalledList.setVisibleRowCount(installedProjects.size());
-    }
-
-    private void reloadUpdatesList() {
-        UpdatesList.setListData(updatableProjects.toArray());
-        UpdatesList.setCellRenderer(new GearSpecCellRenderer());
-        UpdatesList.setVisibleRowCount(updatableProjects.size());
-
-        //Set number of available updates in the updates tab
-        SearchTabbedPane.setTitleAt(3, "Updates (" + updatableProjects.size() + ")");
     }
 
     private void reloadVersionList() {
@@ -493,20 +443,6 @@ public class ManageDependenciesForm {
         worker.execute();
     }
 
-    private void refreshDeclaredList(final String searchString) {
-        SearchDeclaredDependenciesWorker declaredProjectsWorker = new SearchDeclaredDependenciesWorker(targetProjects[TargetProjectComboBox.getSelectedIndex()], searchString) {
-
-            @Override
-            protected void done() {
-                super.done();
-
-                declaredProjects = this.specs;
-                reloadDeclaredList();
-            }
-        };
-        declaredProjectsWorker.execute();
-    }
-
     private void refreshInstalledList(final String searchString) {
         SearchInstalledProjectsWorker installedProjectsWorker = new SearchInstalledProjectsWorker(targetProjects[TargetProjectComboBox.getSelectedIndex()], searchString) {
 
@@ -516,20 +452,6 @@ public class ManageDependenciesForm {
 
                 installedProjects = this.specs;
                 reloadInstalledList();
-            }
-        };
-        installedProjectsWorker.execute();
-    }
-
-    private void refreshUpdatedList(final String searchString) {
-        SearchUpdatableProjectsWorker installedProjectsWorker = new SearchUpdatableProjectsWorker(targetProjects[TargetProjectComboBox.getSelectedIndex()], searchString) {
-
-            @Override
-            protected void done() {
-                super.done();
-
-                updatableProjects = this.specs;
-                reloadUpdatesList();
             }
         };
         installedProjectsWorker.execute();
@@ -557,15 +479,6 @@ public class ManageDependenciesForm {
         }
     }
 
-    private void didSelectDeclaredSpecAtIndex(int index) {
-        if (index >= 0 && index < declaredProjects.size()) {
-            selectedSpec = declaredProjects.get(index);
-            setDetailsForSpec(selectedSpec); //MAY NEED TO CHANGE
-            getVersionDetailsForSpec();
-        }
-
-    }
-
     private void didSelectInstalledSpecAtIndex(int index) {
         if (index >= 0 && index < installedProjects.size()) {
             selectedSpec = installedProjects.get(index);
@@ -573,14 +486,6 @@ public class ManageDependenciesForm {
             getVersionDetailsForSpec();
         }
 
-    }
-
-    private void didSelectUpdatesSpecAtIndex(int index) {
-        if (index >= 0 && index < updatableProjects.size()) {
-            selectedUpdateSpec = updatableProjects.get(index);
-            setDetailsForSpec(selectedUpdateSpec);
-            getVersionDetailsForSpec();
-        }
     }
 
     private void didSelectSpecVersion(int index) {
@@ -736,9 +641,6 @@ public class ManageDependenciesForm {
                     } else {
                         StatusLabel.setText("Installation failed for: " + spec.getName());
                     }
-
-                    //Refresh updatable specs
-                    refreshUpdatedList("");
                 }
             };
             worker.execute();
@@ -774,8 +676,6 @@ public class ManageDependenciesForm {
                     StatusLabel.setText("Successfully uninstalled gear.");
                     UpdateDependencyButton.setVisible(false);
                     refreshSelectedTabList(SearchTextField.getText());
-                    //Refresh updatable specs
-                    refreshUpdatedList("");
 
                     //If on the updates page, hide everything
                     if (SearchTabbedPane.getSelectedIndex() >= 1) {
