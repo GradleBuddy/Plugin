@@ -2,6 +2,7 @@ package Workers.Search;
 
 import Models.GearSpec.DependencySpec;
 import Models.GearSpec.DependencySpecAuthor;
+import Utilities.JCenter;
 import Utilities.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -30,115 +31,8 @@ public class SearchProjectListWorker  extends SwingWorker<Void, Void> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        specs = projectsList(Utils.androidGearsDirectory(), searchString);
+        specs = JCenter.searchJcenter(this.searchString);
         return null;
-    }
-
-    private ArrayList<DependencySpec> projectsList(File androidGearsDirectory, final String searchString){
-        /*
-        //Check for empty search string
-        if(searchString.equals("")){
-            return new ArrayList<GearSpec>();
-        }*/
-
-        //Create gson instance for use in parsing specNames
-        final Gson gson = new Gson();
-
-        //Create array for storing matched specNames
-        final ArrayList<DependencySpec> projectList = new ArrayList<DependencySpec>();
-
-        //If there is a searchstring, get matches!
-        String directories[] =  androidGearsDirectory.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String name) {
-                if(name.contains(".")){ //No hidden folders!
-                    return  false;
-                }
-                else if (!(new File(file.getAbsolutePath()+Utils.pathSeparator()+name).isDirectory())){
-                    return false;
-                }
-                //If it matches the filename, lets skip the metadata search and add it directly. Save the cycles!
-                else if (name.toLowerCase().contains(searchString.toLowerCase())){ //Accept only those that match your search string
-                    //Get versions for spec
-                    String[] versions = versionsForProject(name, Utils.pathSeparator());
-
-                    //Build spec location
-                    File specFile = new File(Utils.androidGearsDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+versions[versions.length-1]+Utils.pathSeparator()+name+".gearspec");
-
-                    if (specFile.exists()){
-                        String specString = null;
-                        try {
-                            specString = FileUtils.readFileToString(specFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
-
-                        DependencySpec spec = gson.fromJson(specString, DependencySpec.class);
-                        spec.setDependencyState(Utils.specStateForSpec(spec, project));
-                        projectList.add(spec);
-                        return true;
-                    }
-                }
-
-
-                //Get versions for spec
-                String[] versions = versionsForProject(name, Utils.pathSeparator());
-
-                //Build spec location
-                File specFile = new File(Utils.androidGearsDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+versions[versions.length-1]+Utils.pathSeparator()+name+".gearspec");
-
-                if(specFile.exists()) {
-                    String specString = null;
-                    try {
-                        specString = FileUtils.readFileToString(specFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-
-                    //Get spec
-                    try {
-                        DependencySpec spec = gson.fromJson(specString, DependencySpec.class);
-
-                        String[] searchParameters = searchString.split(" ");
-                        for (String searchParamter : searchParameters){
-                            String filterString = spec.getName().toLowerCase() + " " + spec.getVersion().toLowerCase();
-
-                            //Gather tags
-                            if (spec.getTags() != null){
-                                for (String tag : spec.getTags()) {
-                                    filterString = filterString+tag.toLowerCase()+" ";
-                                }
-                            }
-
-                            //Gather authors
-                            for (DependencySpecAuthor author : spec.getAuthors()) {
-                                filterString = filterString+author.getName().toLowerCase()+" ";
-                            }
-
-                            //Filter with the search string over spec metadata
-                            if(filterString.contains(searchParamter.toLowerCase())){
-                                //Set spec state
-                                spec.setDependencyState(Utils.specStateForSpec(spec, project));
-                                projectList.add(spec);
-                                return true;
-                            }
-                        }
-                    }
-                    catch (JsonParseException exception){
-
-                    }
-                    catch (Exception exception){
-
-                    }
-                }
-
-                return false;
-            }
-        });
-
-        return projectList;
     }
 
     private String[] versionsForProject(String project, String pathSeparator){
