@@ -18,7 +18,7 @@ public class DependencySpec {
     public static final String SPEC_TYPE_MODULE = "module";
     public static final String SPEC_TYPE_JAR = "jar";
 
-    private DependencyState dependencyState;
+    private DependencyState dependencyState = DependencyState.DependencyStateUninstalled;
     private String name;
     private String summary;
     private String release_notes;

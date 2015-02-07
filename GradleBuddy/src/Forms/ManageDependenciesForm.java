@@ -9,7 +9,7 @@ import java.io.*;
 import Models.GearSpec.DependencySpec;
 import Models.GearSpec.DependencySpecUpdate;
 import Panels.SpecDetailsPanel;
-import Renderers.GearSpecCellRenderer;
+import Renderers.DependencySpecCellRenderer;
 import Renderers.ModuleCellRenderer;
 import Renderers.ProjectCellRenderer;
 import Singletons.SettingsManager;
@@ -414,13 +414,13 @@ public class ManageDependenciesForm {
 
     private void reloadSearchList() {
         AllDependenciesList.setListData(availableDependencies.toArray());
-        AllDependenciesList.setCellRenderer(new GearSpecCellRenderer());
+        AllDependenciesList.setCellRenderer(new DependencySpecCellRenderer());
         AllDependenciesList.setVisibleRowCount(availableDependencies.size());
     }
 
     private void reloadInstalledList() {
         InstalledList.setListData(installedProjects.toArray());
-        InstalledList.setCellRenderer(new GearSpecCellRenderer());
+        InstalledList.setCellRenderer(new DependencySpecCellRenderer());
         InstalledList.setVisibleRowCount(installedProjects.size());
     }
 

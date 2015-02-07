@@ -11,7 +11,7 @@ import java.awt.*;
  * Created by matthewyork on 4/1/14.
  */
 
-public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
+public class DependencySpecCellRenderer extends JPanel implements ListCellRenderer {
     private static final Color HIGHLIGHT_COLOR = Color.decode("0x2B2B2B");
     private Color cellBackgroundColor = null;
 
@@ -20,11 +20,11 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
     JLabel authorLabel;
     JLabel imageLabel;
     //JLabel jarLabel;
-    ImageIcon declaredIcon = new ImageIcon(getClass().getResource("GearStateDeclared.png"));
-    ImageIcon installedIcon = new ImageIcon(getClass().getResource("DependencyStateInstalled.png"));
+    //ImageIcon declaredIcon = new ImageIcon(getClass().getResource("DependencyStateDeclared.png"));
+    //ImageIcon installedIcon = new ImageIcon(getClass().getResource("DependencyStateInstalled.png"));
     //ImageIcon jarfile = new ImageIcon(getClass().getResource("jarfile.png"));
 
-    public GearSpecCellRenderer() {
+    public DependencySpecCellRenderer() {
         setOpaque(true);
         cellBackgroundColor = getBackground();
     }
@@ -53,10 +53,11 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
 
             //Set author label
             authorLabel = new JLabel("", JLabel.LEFT);
-            authorLabel.setFont(new Font(authorLabel.getFont().getName(), Font.PLAIN, 12));
-
-            //Set Author Label
-            authorLabel.setText(spec.getAuthor().getName());
+            if (spec.getAuthor() != null) {
+                if (spec.getAuthor().getName() != null) {
+                    authorLabel.setText(spec.getAuthor().getName());
+                }
+            }
 
             //Set image
             imageLabel = new JLabel();
@@ -64,9 +65,7 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             switch (spec.getDependencyState().ordinal()){
                 case 0: imageLabel.setIcon(new ImageIcon());
                     break;
-                case 1: imageLabel.setIcon(declaredIcon);
-                    break;
-                case 2: imageLabel.setIcon(installedIcon);
+                case 1: imageLabel.setIcon(new ImageIcon()); //imageLabel.setIcon(installedIcon);
                     break;
             }
 
@@ -93,17 +92,20 @@ public class GearSpecCellRenderer extends JPanel implements ListCellRenderer {
             nameLabel.setText(spec.getName());
 
             //Set Author Label
-            authorLabel.setText(spec.getAuthor().getName());
+            if (spec.getAuthor() != null) {
+                if (spec.getAuthor().getName() != null) {
+                    authorLabel.setText(spec.getAuthor().getName());
+                }
+            }
 
             //Set image
+            /*
             switch (spec.getDependencyState().ordinal()){
                 case 0: imageLabel.setIcon(new ImageIcon());
                     break;
-                case 1: imageLabel.setIcon(declaredIcon);
+                case 1: imageLabel.setIcon(new ImageIcon()); //imageLabel.setIcon(installedIcon);
                     break;
-                case 2: imageLabel.setIcon(installedIcon);
-                    break;
-            }
+            }*/
             //set if jar
             /*
             if(spec.getType().equals("jar")){
