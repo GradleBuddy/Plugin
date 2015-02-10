@@ -24,7 +24,7 @@ public class JCenter {
         ArrayList<DependencySpec> searchResults = new ArrayList<DependencySpec>();
 
         //Get HTML for Query
-        String html = testHTML(); //HTMLForQueryString(queryString);
+        String html =  HTMLForQueryString(queryString);
 
         //If valid HTML was returned
         if (html != "") {
@@ -38,7 +38,12 @@ public class JCenter {
         try {
             Request request = Request.Post("https://bintray.com/bintray/jcenter");
             request.addHeader("Host", "bintray.com");
-            request.bodyString("filterByPkgName="+queryString+"&repoPath=%2Fbintray%2Fjcenter&sortBy=sortPriority", ContentType.TEXT_PLAIN);
+            request.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            request.addHeader("Accept", "*/*");
+            request.addHeader("Origin", "https://bintray.com");
+            request.addHeader("Connection", "keep-alive");
+            String asdf = "filterByPkgName="+queryString+"&repoPath=%2Fbintray%2Fjcenter&sortBy=sortPriority";
+            request.bodyString("filterByPkgName="+queryString+"&repoPath=%2Fbintray%2Fjcenter&sortBy=sortPriority", ContentType.APPLICATION_FORM_URLENCODED);
 
             return request.execute().returnContent().asString();
         }
@@ -57,8 +62,8 @@ public class JCenter {
                         .split("\\s*<div class=\"box\">\\s*"));
 
         //TESTING
-        DependencySpec testSpec = dependencySpecForEntry(testHTML());
-        dependencySpecs.add(testSpec);
+        //DependencySpec testSpec = dependencySpecForEntry(testHTML());
+        //dependencySpecs.add(testSpec);
 
         // Scan through components and build posts
         for (int xx = 1; xx < htmlComponents.size(); xx++) {
@@ -87,9 +92,10 @@ public class JCenter {
 
             //Assign avatar
 
+
+            scanner.skipToString("background-image: url(");
+
             scanner.setScanIndex(0);
-            //scanner.skipToString("background-image: url(");
-            //spec.sp
         }
 
         // Scan Url
