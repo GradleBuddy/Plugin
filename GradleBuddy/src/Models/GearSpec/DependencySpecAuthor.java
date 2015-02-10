@@ -8,6 +8,9 @@ public class DependencySpecAuthor {
     private String email;
     private String imageUrl;
 
+    public DependencySpecAuthor() {
+    }
+
     public DependencySpecAuthor(String name, String email) {
         this.name = name;
         this.email = email;

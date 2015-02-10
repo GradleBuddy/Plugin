@@ -1,6 +1,7 @@
 package Utilities;
 
 import Models.GearSpec.DependencySpec;
+import Models.GearSpec.DependencySpecAuthor;
 import Models.GearSpec.DependencySpecSource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.http.HttpResponse;
@@ -81,6 +82,8 @@ public class JCenter {
         htmlString = htmlString.replaceAll("\n", "");
 
         DependencySpec spec = new DependencySpec();
+        spec.setSource(new DependencySpecSource());
+        spec.getSource().setName("jCenter (bintray.com)");
 
         OMScanner scanner = new OMScanner(htmlString);
         int contentIndex = -1;
@@ -90,12 +93,17 @@ public class JCenter {
         if (contentIndex != -1) {
             scanner.setScanIndex(contentIndex + "id=score_".length());
 
-            //Assign avatar
-
-
+            //Get user image
             scanner.skipToString("background-image: url(");
+            String authorUrlString = scanner.scanToString(")");
+            spec.setAuthor(new DependencySpecAuthor());
+            spec.getAuthor().setImageUrl(authorUrlString);
 
-            scanner.setScanIndex(0);
+
+            //Get user name
+            scanner.skipToString("class=\"username\"");
+            scanner.skipToString(">");
+            spec.getAuthor().setName(scanner.scanToString("<").trim());
         }
 
         // Scan Url
@@ -104,7 +112,6 @@ public class JCenter {
             scanner.setScanIndex(contentIndex + "<div class=\"title\">".length());
             //Get URL
             scanner.skipToString("<a href=\"");
-            spec.setSource(new DependencySpecSource());
             String urlString = scanner.scanToString("\"");
             spec.getSource().setUrl("https://bintray.com" + urlString);
 
@@ -132,13 +139,15 @@ public class JCenter {
             spec.setSummary(scanner.scanToString("\""));
         }
 
-        /*
-        //Get image url
-        contentIndex = htmlString.indexOf("<div class=\"description\" title=\"");
+        //Get version
+        contentIndex = htmlString.indexOf("<div class=\"version\">");
         if (contentIndex != -1) {
-            spec.setSummary(scanner.scanToString("<"));
-            spec.getAuthor().setImageUrl(scanner.scanToString("\""));
-        }*/
+            scanner.setScanIndex(contentIndex + "<div class=\"version\">".length());
+            spec.setVersion(scanner.scanToString("<").trim());
+        }
+
+        //Get date
+
 
         return spec;
     }

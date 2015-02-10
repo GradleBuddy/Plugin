@@ -7,6 +7,7 @@ public class DependencySpecSource {
     private String url;
     private String tag;
     private String source_files;
+    private String name;
 
     public DependencySpecSource() {
 
@@ -40,5 +41,13 @@ public class DependencySpecSource {
 
     public void setSource_files(String source_files) {
         this.source_files = source_files;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
