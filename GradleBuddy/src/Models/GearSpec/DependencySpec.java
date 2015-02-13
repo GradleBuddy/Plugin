@@ -1,8 +1,8 @@
 package Models.GearSpec;
 
 import Models.GearSpecRegister.GearSpecRegister;
-import Utilities.GearSpecRegistrar;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 
@@ -15,15 +15,11 @@ public class DependencySpec {
         DependencyStateInstalled
     };
 
-    public static final String SPEC_TYPE_MODULE = "module";
-    public static final String SPEC_TYPE_JAR = "jar";
-
     private DependencyState dependencyState = DependencyState.DependencyStateUninstalled;
     private String name;
     private String summary;
     private String release_notes;
     private String version;
-    private String type;
     private String copyright;
     private String homepage;
     private String rating;
@@ -72,14 +68,6 @@ public class DependencySpec {
 
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getCopyright() {
@@ -150,6 +138,14 @@ public class DependencySpec {
         return tags;
     }
 
+    public String getSerializedTags() {
+        if (this.tags != null) {
+            return StringUtils.join(this.tags, " ");
+        }
+
+        return "";
+    }
+
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }
@@ -159,19 +155,6 @@ public class DependencySpec {
     ///////////////////////
 
     public Boolean isRegistered(Project project){
-        //Get register
-        GearSpecRegister register = GearSpecRegistrar.getRegister(project);
-
-        //Iterate over register
-        if (register != null){
-            if (register.declaredGears != null){
-                for(DependencySpec spec : register.declaredGears){
-                    if (this.getName().equals(spec.getName()) && this.getVersion().equals(spec.getVersion())){
-                        return true;
-                    }
-                }
-            }
-        }
 
         return false;
     }

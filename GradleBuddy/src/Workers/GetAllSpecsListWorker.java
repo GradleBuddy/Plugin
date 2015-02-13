@@ -22,7 +22,7 @@ public class GetAllSpecsListWorker extends SwingWorker<Void, Void> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        specNames = libsList(Utils.androidGearsDirectory());
+        specNames = libsList(Utils.gradleBuddyDirectory());
         return null;
     }
 

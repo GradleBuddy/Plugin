@@ -3,7 +3,6 @@ package Workers.Search;
 import Models.GearSpec.DependencySpec;
 import Models.GearSpec.DependencySpecAuthor;
 import Models.GearSpecRegister.GearSpecRegister;
-import Utilities.GearSpecRegistrar;
 import Utilities.Utils;
 import com.intellij.openapi.project.Project;
 
@@ -26,7 +25,6 @@ public class SearchInstalledProjectsWorker extends SwingWorker<Void, Void>{
 
     @Override
     protected Void doInBackground() throws Exception {
-
 
 
         return null;

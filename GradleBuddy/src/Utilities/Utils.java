@@ -22,7 +22,7 @@ public class Utils {
         return String.format("<html><div style=\"width:%dpx;\">%s</div><html>", wrapWidth, inputString);
     }
 
-    public static File androidGearsDirectory(){
+    public static File gradleBuddyDirectory(){
 
         return new File(SettingsManager.getInstance().getSpecsPath()+Utils.pathSeparator()+"repos");
     }
@@ -31,15 +31,15 @@ public class Utils {
         File defaultDirectory;
         //Setup file
         if (OSValidator.isWindows()) {
-            defaultDirectory = new File(System.getProperty("user.home")+"/AndroidGears"); //C drive
+            defaultDirectory = new File(System.getProperty("user.home")+"/GradleBuddy"); //C drive
         } else if (OSValidator.isMac()) {
-            defaultDirectory = new File(System.getProperty("user.home")+"/.androidgears"); //Home folder
+            defaultDirectory = new File(System.getProperty("user.home")+"/.gradlebuddy"); //Home folder
         } else if (OSValidator.isUnix()) {
-            defaultDirectory = new File("~/.androidgears"); //Home folder
+            defaultDirectory = new File("~/.gradlebuddy"); //Home folder
         } else if (OSValidator.isSolaris()) {
-            defaultDirectory = new File("~/AndroidGears");//Home folder
+            defaultDirectory = new File("~/GradleBuddy");//Home folder
         } else {
-            defaultDirectory = new File("~/AndroidGears");//Home folder
+            defaultDirectory = new File("~/GradleBuddy");//Home folder
         }
 
         return defaultDirectory;
@@ -98,12 +98,12 @@ public class Utils {
         //Create spec file
         File specFile = null;
         if (version != null){
-            specFile = new File(Utils.androidGearsDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+version+Utils.pathSeparator()+name+".gearspec");
+            specFile = new File(Utils.gradleBuddyDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+version+Utils.pathSeparator()+name+".gearspec");
         }
         else {
             String[] versions = versionsForProject(name);
             if (versions.length > 0){
-                specFile = new File(Utils.androidGearsDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+versions[versions.length-1]+Utils.pathSeparator()+name+".gearspec");
+                specFile = new File(Utils.gradleBuddyDirectory()+Utils.pathSeparator()+name+Utils.pathSeparator()+versions[versions.length-1]+Utils.pathSeparator()+name+".gearspec");
             }
         }
 
@@ -111,31 +111,8 @@ public class Utils {
     }
 
     public static String[] versionsForProject(String project){
-        File versionsDirectory = new File(Utils.androidGearsDirectory().getAbsolutePath()+Utils.pathSeparator()+project);
+        File versionsDirectory = new File(Utils.gradleBuddyDirectory().getAbsolutePath()+Utils.pathSeparator()+project);
         return versionsDirectory.list();
-    }
-
-    public static String jarFileNameForSpecSource(DependencySpecSource source){
-
-        //Get element with jar name in it
-        String sourceString;
-        if(source.getUrl().toLowerCase().contains(".jar")){
-            sourceString = source.getUrl();
-        }
-        else {
-            sourceString = source.getSource_files();
-        }
-
-        //Parse out jar name
-        if (sourceString.contains("/")){
-            int lastPathSeparatorIndex = sourceString.lastIndexOf("/");
-            String fileName = sourceString.substring(lastPathSeparatorIndex+1);
-
-            return fileName;
-        }
-        else {
-            return source.getSource_files();
-        }
     }
 
     public static DependencySpec.DependencyState specStateForSpec(DependencySpec spec, Project project){
@@ -167,21 +144,5 @@ public class Utils {
 //        }
 
         return DependencySpec.DependencyState.DependencyStateUninstalled;
-    }
-
-    public static File fileInstallPathForSpec(DependencySpec spec, Project project){
-        if (spec != null & project != null){
-            //Make local separator for speed
-            String pathSeparator = Utils.pathSeparator();
-
-            if (spec.getType().equals(DependencySpec.SPEC_TYPE_JAR)){
-                return new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Jars"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion());
-            }
-            else if (spec.getType().equals(DependencySpec.SPEC_TYPE_MODULE)){
-                return new File(project.getBasePath()+pathSeparator+"Gears"+pathSeparator+"Modules"+pathSeparator+spec.getName()+pathSeparator+spec.getVersion());
-            }
-        }
-
-        return null;
     }
 }

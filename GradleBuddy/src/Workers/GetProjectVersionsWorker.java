@@ -39,7 +39,7 @@ public class GetProjectVersionsWorker extends SwingWorker<Void, Void> {
     }
 
     private ArrayList<String> versionsForProject(String project, String pathSeparator){
-        File versionsDirectory = new File(Utils.androidGearsDirectory().getAbsolutePath()+pathSeparator+project);
+        File versionsDirectory = new File(Utils.gradleBuddyDirectory().getAbsolutePath()+pathSeparator+project);
 
         ArrayList<String> versions = new ArrayList<String>(Arrays.asList(versionsDirectory.list(new FilenameFilter() {
             @Override

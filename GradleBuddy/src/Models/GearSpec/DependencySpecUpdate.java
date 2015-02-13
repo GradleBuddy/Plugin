@@ -11,7 +11,6 @@ public class DependencySpecUpdate extends DependencySpec {
         setSummary(spec.getSummary());
         setRelease_notes(spec.getRelease_notes());
         setVersion(spec.getVersion());
-        setType(spec.getType());
         setCopyright(spec.getCopyright());
         setHomepage(spec.getHomepage());
         setLicense(spec.getLicense());

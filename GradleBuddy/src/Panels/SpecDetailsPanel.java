@@ -32,7 +32,7 @@ public class SpecDetailsPanel extends JPanel{
 
         //Add version and type
         if (selectedSpec.getVersion() != null){
-            JLabel versionLabel = new JLabel(selectedSpec.getVersion() + " - " + selectedSpec.getType(), JLabel.LEFT);
+            JLabel versionLabel = new JLabel(selectedSpec.getVersion() + " - " + selectedSpec.getSource().name, JLabel.LEFT);
             versionLabel.setFont(new Font(versionLabel.getFont().getName(), Font.BOLD, 12));
             this.add(versionLabel);
         }

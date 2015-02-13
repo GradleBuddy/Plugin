@@ -21,7 +21,8 @@ import java.util.*;
 import Workers.*;
 import Workers.InstallUninstall.*;
 import Workers.Search.SearchInstalledProjectsWorker;
-import Workers.Search.SearchProjectListWorker;
+import Workers.Search.SearchLocalProjectsListWorker;
+import Workers.Search.SearchOnlineListWorker;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -40,6 +41,7 @@ public class ManageDependenciesForm {
     File androidDependenciesDirectory;
     private DependencySpec selectedSpec;
     private DependencySpecUpdate selectedUpdateSpec;
+    private ArrayList<DependencySpec> recommendedDependencies;
     private ArrayList<DependencySpec> availableDependencies;
     private ArrayList<DependencySpec> installedProjects;
     private ArrayList<String> projectVersions;
@@ -52,7 +54,8 @@ public class ManageDependenciesForm {
     public JPanel MasterPanel;
     private JPanel SearchPanel;
     private JPanel DetailsPanel;
-    private JList AllDependenciesList;
+    private JList RecommendedDependenciesList;
+    private JList OnlineDependenciesList;
     private JList InstalledList;
     private JScrollPane DetailsScrollPane;
     private JLabel StatusLabel;
@@ -83,16 +86,25 @@ public class ManageDependenciesForm {
     private void setupTables() {
 
         //Add directories mode
-        refreshAvailableDependenciesList("");
+        refreshRecommendedDependenciesList("");
 
         //Get installed dependencies
         refreshInstalledList("");
 
         //Setup click listener
-        AllDependenciesList.addListSelectionListener(new ListSelectionListener() {
+        RecommendedDependenciesList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                didSelectSearchSpecAtIndex(AllDependenciesList.getSelectedIndex());
+                didSelectSearchSpecAtIndex(RecommendedDependenciesList.getSelectedIndex());
+            }
+        });
+        //AllDependenciesList.setFocusable(false);
+
+        //Setup click listener
+        OnlineDependenciesList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                didSelectSearchSpecAtIndex(OnlineDependenciesList.getSelectedIndex());
             }
         });
         //AllDependenciesList.setFocusable(false);
@@ -404,18 +416,27 @@ public class ManageDependenciesForm {
     private void refreshSelectedTabList(String searchString) {
         switch (SearchTabbedPane.getSelectedIndex()) {
             case 0:
-                refreshAvailableDependenciesList(searchString);
+                refreshRecommendedDependenciesList(searchString);
                 break;
             case 1:
+                refreshOnlineDependenciesList(searchString);
+                break;
+            case 2:
                 refreshInstalledList(searchString);
                 break;
         }
     }
 
+    private void reloadRecommendedList() {
+        RecommendedDependenciesList.setListData(recommendedDependencies.toArray());
+        RecommendedDependenciesList.setCellRenderer(new DependencySpecCellRenderer());
+        RecommendedDependenciesList.setVisibleRowCount(recommendedDependencies.size());
+    }
+
     private void reloadSearchList() {
-        AllDependenciesList.setListData(availableDependencies.toArray());
-        AllDependenciesList.setCellRenderer(new DependencySpecCellRenderer());
-        AllDependenciesList.setVisibleRowCount(availableDependencies.size());
+        OnlineDependenciesList.setListData(availableDependencies.toArray());
+        OnlineDependenciesList.setCellRenderer(new DependencySpecCellRenderer());
+        OnlineDependenciesList.setVisibleRowCount(availableDependencies.size());
     }
 
     private void reloadInstalledList() {
@@ -430,9 +451,22 @@ public class ManageDependenciesForm {
         VersionsList.setVisibleRowCount(projectVersions.size());
     }
 
-    private void refreshAvailableDependenciesList(String searchString) {
+    private void refreshRecommendedDependenciesList(String searchString) {
         //Get availableDependencies and reload
-        SearchProjectListWorker worker = new SearchProjectListWorker(searchString, targetProjects[TargetProjectComboBox.getSelectedIndex()]) {
+        SearchLocalProjectsListWorker worker = new SearchLocalProjectsListWorker(searchString, targetProjects[TargetProjectComboBox.getSelectedIndex()]) {
+            @Override
+            protected void done() {
+                super.done();
+                recommendedDependencies = this.specs;
+                reloadRecommendedList();
+            }
+        };
+        worker.execute();
+    }
+
+    private void refreshOnlineDependenciesList(String searchString) {
+        //Get availableDependencies and reload
+        SearchOnlineListWorker worker = new SearchOnlineListWorker(searchString, targetProjects[TargetProjectComboBox.getSelectedIndex()]) {
             @Override
             protected void done() {
                 super.done();
@@ -470,6 +504,13 @@ public class ManageDependenciesForm {
     ///////////////////////
     // JList Selection
     ////////////////////////
+    private void didSelectRecommendedSpecAtIndex(int index) {
+        if (index >= 0 && index < recommendedDependencies.size()) {
+            selectedSpec = recommendedDependencies.get(index);
+            setDetailsForSpec(selectedSpec);
+            getVersionDetailsForSpec();
+        }
+    }
 
     private void didSelectSearchSpecAtIndex(int index) {
         if (index >= 0 && index < availableDependencies.size()) {
@@ -586,11 +627,7 @@ public class ManageDependenciesForm {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
             try {
-                if (selectedSpec.getHomepage().contains("github.com")) {
-                    desktop.browse(URI.create(selectedSpec.getHomepage() + "/tree/" + selectedSpec.getSource().getTag()));
-                } else {
-                    desktop.browse(URI.create(selectedSpec.getHomepage()));
-                }
+                desktop.browse(URI.create(selectedSpec.getSource().webUrl));
             } catch (Exception e) {
                 e.printStackTrace();
             }

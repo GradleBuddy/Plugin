@@ -83,7 +83,7 @@ public class JCenter {
 
         DependencySpec spec = new DependencySpec();
         spec.setSource(new DependencySpecSource());
-        spec.getSource().setName("jCenter (bintray.com)");
+        spec.getSource().name = "jCenter (bintray.com)";
 
         OMScanner scanner = new OMScanner(htmlString);
         int contentIndex = -1;
@@ -113,7 +113,7 @@ public class JCenter {
             //Get URL
             scanner.skipToString("<a href=\"");
             String urlString = scanner.scanToString("\"");
-            spec.getSource().setUrl("https://bintray.com" + urlString);
+            spec.getSource().webUrl = "https://bintray.com" + urlString;
 
             //Get Title
             scanner.skipToString(">");
