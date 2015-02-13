@@ -41,7 +41,9 @@ public class GradleBuddy {
                 String jsonString = request.execute().returnContent().asString();
 
                 //Save file so we don't have to fetch it again
-                FileUtils.write(listingsFile, jsonString);
+                if (jsonString.length() > 0) {
+                    FileUtils.write(listingsFile, jsonString);
+                }
 
                 return jsonString;
             }
@@ -57,11 +59,12 @@ public class GradleBuddy {
         ArrayList<DependencySpec> matchingSpecs = new ArrayList<DependencySpec>();
 
         //Break up search string, if necessary
-        String[] searchParams = searchString.split(" ");
+        String[] searchParams = searchString.toLowerCase().split(" ");
 
         //Iterate over all specs looking for matches
         for (DependencySpec spec : masterSpecs) {
             String specMatchString = spec.getName()+" "+spec.getAuthor()+" "+spec.getSerializedTags();
+            specMatchString = specMatchString.toLowerCase();
 
             //Iterate over all search parameters
             for (String searchParam : searchParams) {
@@ -73,5 +76,24 @@ public class GradleBuddy {
         }
 
         return matchingSpecs;
+    }
+
+    public static void reloadLocalRecommendations() {
+        //Get settings file
+        File listingsFile = new File(Utils.getDefaultDirectory().getAbsolutePath()+Utils.pathSeparator()+"Dependencies.json");
+
+        try {
+            //Make request and get json
+            Request request = Request.Get("https://raw.githubusercontent.com/GradleBuddy/RecommendedDependencies/master/Dependencies.json");
+            String jsonString = request.execute().returnContent().asString();
+
+            //Save file so we don't have to fetch it again
+            if (jsonString.length() > 0) {
+                FileUtils.write(listingsFile, jsonString);
+            }
+        }
+        catch (Exception e) {
+
+        }
     }
 }

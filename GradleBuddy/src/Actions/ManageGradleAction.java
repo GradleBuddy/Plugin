@@ -11,7 +11,7 @@ import javax.swing.*;
  */
 public class ManageGradleAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
-        JFrame frame = new JFrame("Manage Android Gears");
+        JFrame frame = new JFrame("Manage Gradle Dependencies");
         frame.setContentPane(new ManageDependenciesForm().MasterPanel);
         frame.setResizable(false);
         frame.pack();

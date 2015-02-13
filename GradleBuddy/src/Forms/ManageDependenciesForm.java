@@ -13,6 +13,7 @@ import Renderers.DependencySpecCellRenderer;
 import Renderers.ModuleCellRenderer;
 import Renderers.ProjectCellRenderer;
 import Singletons.SettingsManager;
+import Utilities.GradleBuddy;
 import Utilities.Utils;
 
 import java.net.URI;
@@ -20,6 +21,7 @@ import java.util.*;
 
 import Workers.*;
 import Workers.InstallUninstall.*;
+import Workers.Reloads.ReloadRecommendedDependenciesWorker;
 import Workers.Search.SearchInstalledProjectsWorker;
 import Workers.Search.SearchLocalProjectsListWorker;
 import Workers.Search.SearchOnlineListWorker;
@@ -38,7 +40,6 @@ public class ManageDependenciesForm {
     private static final int AGREE_TO_UNINSTALL_GEAR_AND_DEPENDENTS = 2;
     private Boolean dirty = false; //If set true, then we need to rebuild project
 
-    File androidDependenciesDirectory;
     private DependencySpec selectedSpec;
     private DependencySpecUpdate selectedUpdateSpec;
     private ArrayList<DependencySpec> recommendedDependencies;
@@ -59,8 +60,6 @@ public class ManageDependenciesForm {
     private JList InstalledList;
     private JScrollPane DetailsScrollPane;
     private JLabel StatusLabel;
-    private JList VersionsList;
-    private JLabel ChangeVersionsLabel;
     private JButton InstallUninstallButton;
     private JButton OpenInBrowserButton;
     private JLabel LoadingSpinnerLabel;
@@ -85,8 +84,16 @@ public class ManageDependenciesForm {
 
     private void setupTables() {
 
-        //Add directories mode
+        //Reload recommended list by fetching new copy of recommended dependencies
         refreshRecommendedDependenciesList("");
+        ReloadRecommendedDependenciesWorker worker = new ReloadRecommendedDependenciesWorker() {
+            @Override
+            protected void done() {
+                super.done();
+                refreshRecommendedDependenciesList("");
+            }
+        };
+        worker.execute();
 
         //Get installed dependencies
         refreshInstalledList("");
@@ -95,7 +102,7 @@ public class ManageDependenciesForm {
         RecommendedDependenciesList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                didSelectSearchSpecAtIndex(RecommendedDependenciesList.getSelectedIndex());
+                didSelectRecommendedSpecAtIndex(RecommendedDependenciesList.getSelectedIndex());
             }
         });
         //AllDependenciesList.setFocusable(false);
@@ -116,14 +123,6 @@ public class ManageDependenciesForm {
             }
         });
         //InstalledList.setFocusable(false);
-
-        VersionsList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                didSelectSpecVersion(VersionsList.getSelectedIndex());
-            }
-        });
-        VersionsList.setFocusable(true);
     }
 
     private void setupSearchTextField() {
@@ -352,7 +351,6 @@ public class ManageDependenciesForm {
     }
 
     private void setupMiscUI() {
-        ChangeVersionsLabel.setFont(new Font(ChangeVersionsLabel.getFont().getName(), Font.PLAIN, 12));
         StatusLabel.setText("");
         LoadingSpinnerLabel.setVisible(false);
 
@@ -443,12 +441,6 @@ public class ManageDependenciesForm {
         InstalledList.setListData(installedProjects.toArray());
         InstalledList.setCellRenderer(new DependencySpecCellRenderer());
         InstalledList.setVisibleRowCount(installedProjects.size());
-    }
-
-    private void reloadVersionList() {
-        VersionsList.setListData(projectVersions.toArray());
-        VersionsList.setCellRenderer(new DefaultListCellRenderer());
-        VersionsList.setVisibleRowCount(projectVersions.size());
     }
 
     private void refreshRecommendedDependenciesList(String searchString) {
@@ -581,7 +573,6 @@ public class ManageDependenciesForm {
 
         //Clear version list entry
         projectVersions = new ArrayList<String>();
-        reloadVersionList();
 
         //Hide buttons
         InstallUninstallButton.setVisible(false);
@@ -613,8 +604,6 @@ public class ManageDependenciesForm {
                 super.done();
 
                 projectVersions = this.versions;
-
-                reloadVersionList();
             }
         };
         worker.execute();
