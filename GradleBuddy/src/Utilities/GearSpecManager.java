@@ -26,6 +26,36 @@ public class GearSpecManager {
     }
 
     public static Boolean installGear(DependencySpec spec, Project project, Module module, DependencySpec parentSpec){
+        File buildFile = new File(new File(module.getModuleFilePath()).getParentFile().getAbsolutePath() + Utils.pathSeparator() + "build.gradle");
+
+        if (buildFile.exists()) {
+            try {
+                //Read back string from build file
+                String buildFileString = FileUtils.readFileToString(buildFile);
+
+                //Create new addition
+                String newDependencyString = "dependencies{"+spec.getSource().dependency+"}";
+
+                //Check to see if it is already there
+                if (!buildFileString.contains(spec.getSource().dependency)) {
+                    //Make edit
+                    buildFileString = buildFileString.concat("\n"+newDependencyString);
+
+                    //Write changes to settings.gradle
+                    FileUtils.forceDelete(buildFile);
+                    FileUtils.write(buildFile, buildFileString);
+
+                    return true;
+                }
+                else {
+                    return true;
+                }
+            }
+            catch (Exception e) {
+
+            }
+        }
+
         return false;
     }
 
